@@ -1,0 +1,11 @@
+{
+  "name": "waiter-shift-tracker",
+  "version": "1.0.0",
+  "description": "Track shifts and income for part time waiter as offline first PWA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexis Roehrling",
+  "license": "MIT"
+}
