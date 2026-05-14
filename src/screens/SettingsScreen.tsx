@@ -1,23 +1,32 @@
 import {
-  ActionIcon,
   Box,
   Button,
+  Collapse,
   Container,
+  Divider,
   Drawer,
   Group,
+  Modal,
   NumberInput,
   Select,
   Stack,
   Text,
   TextInput,
   ThemeIcon,
-  Title,
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { IconBriefcase, IconChevronLeft, IconChevronRight, IconUser } from '@tabler/icons-react';
+import {
+  IconBriefcase,
+  IconChevronDown,
+  IconChevronRight,
+  IconDownload,
+  IconUpload,
+  IconUser,
+} from '@tabler/icons-react';
+import { type ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -25,6 +34,11 @@ import {
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
 } from '../constants';
+import {
+  buildExportJsonString,
+  persistVerifiedBackupJson,
+  verifyBackupJsonForImport,
+} from '../store/appDataBackup';
 import { useAppStore } from '../store/useAppStore';
 
 export const SettingsScreen = () => {
@@ -38,6 +52,11 @@ export const SettingsScreen = () => {
   const clearAllData = useAppStore((state) => state.clearAllData);
 
   const [opened, { open, close }] = useDisclosure(false);
+  const [advancedOpened, { toggle: toggleAdvanced }] = useDisclosure(false);
+  const [importConfirmOpened, { open: openImportConfirm, close: closeImportConfirm }] =
+    useDisclosure(false);
+  const importInputRef = useRef<HTMLInputElement>(null);
+  const [importError, setImportError] = useState<string | null>(null);
 
   const defaultCompany = companies.find((c) => c.id === profile?.defaultCompanyId) || companies[0];
 
@@ -66,6 +85,61 @@ export const SettingsScreen = () => {
     clearAllData();
     close();
     navigate('/onboarding');
+  };
+
+  const handleExportBackup = async () => {
+    setImportError(null);
+    try {
+      const json = await buildExportJsonString(useAppStore.getState());
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `waiter-shift-tracker-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setImportError(t('settings.exportFailed'));
+    }
+  };
+
+  const handleImportFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    setImportError(null);
+    let text: string;
+    try {
+      text = await file.text();
+    } catch {
+      setImportError(t('settings.importInvalidJson'));
+      return;
+    }
+
+    const verified = await verifyBackupJsonForImport(text);
+    if (!verified.ok) {
+      setImportError(t(verified.errorKey));
+      return;
+    }
+    const result = await persistVerifiedBackupJson(verified.persistJson);
+    if (result.ok) {
+      window.location.reload();
+      return;
+    }
+    setImportError(t(result.errorKey));
+  };
+
+  const cancelImportConfirm = () => {
+    closeImportConfirm();
+  };
+
+  const handleAcknowledgeImportAndPickFile = () => {
+    setImportError(null);
+    closeImportConfirm();
+    window.setTimeout(() => {
+      importInputRef.current?.click();
+    }, 0);
   };
 
   return (
@@ -234,50 +308,143 @@ export const SettingsScreen = () => {
             style={{
               backgroundColor: 'white',
               borderRadius: theme.radius.lg,
-              padding: '8px 20px',
               border: `1px solid ${theme.colors.gray[2]}`,
               marginBottom: 24,
+              overflow: 'hidden',
             }}
           >
-            <NumberInput
-              variant="unstyled"
-              label={t('settings.maxMonthlyEarnings')}
-              decimalScale={2}
-              leftSection="€"
-              {...form.getInputProps('maxMonthlyEarnings')}
-              styles={{
-                root: {
-                  borderBottom: `1px solid ${theme.colors.gray[2]}`,
-                  paddingBottom: 16,
-                  paddingTop: 8,
-                },
+            <UnstyledButton
+              type="button"
+              onClick={toggleAdvanced}
+              style={{
+                width: '100%',
+                padding: '14px 20px',
+                borderBottom: advancedOpened ? `1px solid ${theme.colors.gray[2]}` : undefined,
               }}
-            />
-            <NumberInput
-              variant="unstyled"
-              label={t('settings.minHourlyWage')}
-              decimalScale={2}
-              leftSection="€"
-              {...form.getInputProps('minHourlyWage')}
-              styles={{
-                root: {
-                  borderBottom: `1px solid ${theme.colors.gray[2]}`,
-                  paddingBottom: 16,
-                  paddingTop: 8,
-                },
-              }}
-            />
-            <Box mt="md" mb="sm">
-              <Button color="red" variant="light" fullWidth onClick={open} type="button">
-                {t('settings.clearAllData')}
-              </Button>
-            </Box>
+            >
+              <Group justify="space-between" wrap="nowrap">
+                <Text size="sm" fw={600}>
+                  {t('settings.advancedExpandHint')}
+                </Text>
+                <IconChevronDown
+                  size={20}
+                  color={theme.colors.gray[6]}
+                  style={{
+                    transform: advancedOpened ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 160ms ease',
+                  }}
+                />
+              </Group>
+            </UnstyledButton>
+            <Collapse expanded={advancedOpened}>
+              <Box px={20} pb="md" pt={4}>
+                <Stack gap="sm">
+                  <NumberInput
+                    variant="unstyled"
+                    label={t('settings.maxMonthlyEarnings')}
+                    decimalScale={2}
+                    leftSection="€"
+                    {...form.getInputProps('maxMonthlyEarnings')}
+                    styles={{
+                      root: {
+                        borderBottom: `1px solid ${theme.colors.gray[2]}`,
+                        paddingBottom: 16,
+                        paddingTop: 8,
+                      },
+                    }}
+                  />
+                  <NumberInput
+                    variant="unstyled"
+                    label={t('settings.minHourlyWage')}
+                    decimalScale={2}
+                    leftSection="€"
+                    {...form.getInputProps('minHourlyWage')}
+                    styles={{
+                      root: {
+                        borderBottom: `1px solid ${theme.colors.gray[2]}`,
+                        paddingBottom: 16,
+                        paddingTop: 8,
+                      },
+                    }}
+                  />
+                  <Box pt="md" pb="md">
+                    <Stack gap="sm">
+                      <Group grow gap="sm">
+                        <Button
+                          type="button"
+                          variant="light"
+                          color="teal"
+                          leftSection={<IconDownload size={18} />}
+                          onClick={() => void handleExportBackup()}
+                        >
+                          {t('settings.exportData')}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="light"
+                          color="teal"
+                          leftSection={<IconUpload size={18} />}
+                          onClick={() => {
+                            setImportError(null);
+                            openImportConfirm();
+                          }}
+                        >
+                          {t('settings.importData')}
+                        </Button>
+                      </Group>
+                      <input
+                        ref={importInputRef}
+                        type="file"
+                        accept="application/json,.json"
+                        style={{ display: 'none' }}
+                        onChange={(e) => void handleImportFile(e)}
+                      />
+                      {importError ? (
+                        <Text size="sm" c="red">
+                          {importError}
+                        </Text>
+                      ) : null}
+                    </Stack>
+                  </Box>
+                  <Divider color={theme.colors.gray[2]} />
+                  <Box pt="md">
+                    <Button color="red" variant="light" fullWidth onClick={open} type="button">
+                      {t('settings.clearAllData')}
+                    </Button>
+                  </Box>
+                </Stack>
+              </Box>
+            </Collapse>
           </Box>
 
           <Button type="submit" size="lg" radius="xl" color="teal.8" fullWidth mb="xl">
             {t('common.save')}
           </Button>
         </form>
+
+        <Modal
+          opened={importConfirmOpened}
+          onClose={cancelImportConfirm}
+          title={<Text fw={700}>{t('settings.importOverwriteTitle')}</Text>}
+          centered
+          radius="lg"
+          size="sm"
+          padding="lg"
+        >
+          <Stack gap="lg">
+            <Text size="sm" c="dimmed">
+              {t('settings.importOverwriteMessage')}
+            </Text>
+            <Group grow>
+              <Button variant="subtle" color="gray" onClick={cancelImportConfirm} radius="xl">
+                {t('settings.cancel')}
+              </Button>
+              <Button color="orange" onClick={handleAcknowledgeImportAndPickFile} radius="xl">
+                {t('settings.importChooseFile')}
+              </Button>
+            </Group>
+          </Stack>
+        </Modal>
 
         <Drawer
           opened={opened}
