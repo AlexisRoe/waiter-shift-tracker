@@ -38,6 +38,9 @@ export interface AppState {
   shifts: Shift[];
   tipTransactions: TipTransaction[];
   isOnboarded: boolean;
+  /** True after `persist` finishes rehydrating from IndexedDB (not persisted). */
+  _hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
   setProfile: (profile: UserProfile) => void;
   updateProfile: (updates: Partial<UserProfile>) => void;
   addCompany: (company: Company) => void;

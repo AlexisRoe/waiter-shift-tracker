@@ -8,16 +8,20 @@ import '@mantine/core/styles.css';
 import './index.css';
 
 import './i18n'; // Initialize i18n
-import App from './App.tsx';
+import { migrateLocalStorageToIndexedDB } from './store/migrateLegacyStorage';
 import { theme } from './theme';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Failed to find the root element');
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <MantineProvider theme={theme}>
-      <App />
-    </MantineProvider>
-  </StrictMode>,
+void migrateLocalStorageToIndexedDB().then(() =>
+  import('./App.tsx').then(({ default: App }) => {
+    createRoot(rootElement).render(
+      <StrictMode>
+        <MantineProvider theme={theme}>
+          <App />
+        </MantineProvider>
+      </StrictMode>,
+    );
+  }),
 );

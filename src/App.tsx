@@ -1,4 +1,4 @@
-import { AppShell } from '@mantine/core';
+import { AppShell, Center, Loader } from '@mantine/core';
 import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout.component';
@@ -17,6 +17,7 @@ import { ShiftListScreen } from './screens/ShiftListScreen';
 import { useAppStore } from './store/useAppStore';
 
 function App() {
+  const hasHydrated = useAppStore((state) => state._hasHydrated);
   const isOnboarded = useAppStore((state) => state.isOnboarded);
   const profile = useAppStore((state) => state.profile);
   const updateProfile = useAppStore((state) => state.updateProfile);
@@ -36,6 +37,14 @@ function App() {
       }
     }
   }, [profile, updateProfile]);
+
+  if (!hasHydrated) {
+    return (
+      <Center h="100vh" bg="#f8f9fa">
+        <Loader />
+      </Center>
+    );
+  }
 
   return (
     <BrowserRouter>

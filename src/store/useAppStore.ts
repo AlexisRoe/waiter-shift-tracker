@@ -1,6 +1,21 @@
+import { del, get, set } from 'idb-keyval';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import type { AppState, Company, Shift, TipTransaction, UserProfile } from './types';
+import { PERSIST_STORAGE_NAME } from './persistKey';
+
+const indexedDBStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    const value = await get(name);
+    return value != null ? String(value) : null;
+  },
+  setItem: async (name: string, value: string) => {
+    await set(name, value);
+  },
+  removeItem: async (name: string) => {
+    await del(name);
+  },
+};
 
 export const useAppStore = create<AppState>()(
   persist(
@@ -10,6 +25,9 @@ export const useAppStore = create<AppState>()(
       shifts: [],
       tipTransactions: [],
       isOnboarded: false,
+      _hasHydrated: false,
+
+      setHasHydrated: (value: boolean) => set({ _hasHydrated: value }),
 
       setProfile: (profile: UserProfile) => set(() => ({ profile, isOnboarded: true })),
 
@@ -53,17 +71,39 @@ export const useAppStore = create<AppState>()(
           tipTransactions: [...state.tipTransactions, transaction],
         })),
 
-      clearAllData: () =>
+      clearAllData: () => {
+        try {
+          localStorage.removeItem(PERSIST_STORAGE_NAME);
+        } catch {
+          /* ignore */
+        }
         set(() => ({
           profile: null,
           companies: [],
           shifts: [],
           tipTransactions: [],
           isOnboarded: false,
-        })),
+        }));
+      },
     }),
     {
-      name: 'waiter-shift-tracker-storage',
+      name: PERSIST_STORAGE_NAME,
+      storage: createJSONStorage(() => indexedDBStorage),
+      partialize: (state) => ({
+        profile: state.profile,
+        companies: state.companies,
+        shifts: state.shifts,
+        tipTransactions: state.tipTransactions,
+        isOnboarded: state.isOnboarded,
+      }),
+      onRehydrateStorage: () => (_state, error) => {
+        if (error) {
+          console.error('[useAppStore] Rehydration from IndexedDB failed', error);
+        }
+        queueMicrotask(() => {
+          useAppStore.getState().setHasHydrated(true);
+        });
+      },
     },
   ),
 );
