@@ -71,12 +71,6 @@ export const SettingsScreen = () => {
   return (
     <Box pb={100}>
       <Container size="sm" p="md">
-        <Group align="center" mt="md" mb="xl">
-          <ActionIcon variant="subtle" color="dark" onClick={() => navigate(-1)}>
-            <IconChevronLeft size={24} />
-          </ActionIcon>
-          <Title order={2}>{t('settings.title')}</Title>
-        </Group>
 
         <Box
           style={{

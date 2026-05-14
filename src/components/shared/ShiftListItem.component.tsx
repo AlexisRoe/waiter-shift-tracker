@@ -8,11 +8,11 @@ import { CurrencyDisplay } from './CurrencyDisplay.component';
 
 interface ShiftListItemProps {
   shift: Shift;
+  onClick: () => void;
 }
 
-export const ShiftListItem = ({ shift }: ShiftListItemProps) => {
+export const ShiftListItem = ({ shift, onClick }: ShiftListItemProps) => {
   const theme = useMantineTheme();
-  const navigate = useNavigate();
 
   const duration = calculateDurationHours(shift.startTime, shift.endTime);
   const wage = duration * shift.hourlyRate;
@@ -20,7 +20,7 @@ export const ShiftListItem = ({ shift }: ShiftListItemProps) => {
 
   return (
     <UnstyledButton
-      onClick={() => navigate(`/shifts/${shift.id}`)}
+      onClick={onClick}
       style={{
         display: 'block',
         width: '100%',

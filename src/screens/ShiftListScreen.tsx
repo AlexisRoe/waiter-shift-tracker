@@ -1,18 +1,19 @@
 import {
-  ActionIcon,
   Box,
   Button,
   Container,
+  Drawer,
   Group,
   Text,
-  Title,
   useMantineTheme,
 } from '@mantine/core';
-import { IconChevronLeft, IconFilter, IconPlus } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
+import { IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
+import { ShiftForm } from '../components/shared/ShiftForm.component';
 import { ShiftListItem } from '../components/shared/ShiftListItem.component';
 import { useAppStore } from '../store/useAppStore';
 import { calculateDurationHours } from '../utils/date.util';
@@ -20,11 +21,9 @@ import { calculateDurationHours } from '../utils/date.util';
 export const ShiftListScreen = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
-  const navigate = useNavigate();
   const shifts = useAppStore((state) => state.shifts);
-
-  // Group shifts by week (mocking the grouping logic slightly for simplicity, based on screenshots)
-  // In a real app, we'd use dayjs().week() to group properly
+  const [opened, { open, close }] = useDisclosure(false);
+  const [selectedShiftId, setSelectedShiftId] = useState<string | undefined>();
 
   const currentMonthShifts = shifts
     .filter((s) => dayjs(s.date).isSame(dayjs(), 'month'))
@@ -39,27 +38,20 @@ export const ShiftListScreen = () => {
     return sum + hours * s.hourlyRate + (s.tips || 0);
   }, 0);
 
+  const handleAddShift = () => {
+    setSelectedShiftId(undefined);
+    open();
+  };
+
+  const handleEditShift = (id: string) => {
+    setSelectedShiftId(id);
+    open();
+  };
+
   return (
     <Box pb={100}>
       <Container size="sm" p="md">
-        <Group justify="space-between" align="center" mt="md" mb="xl">
-          <Group gap="xs">
-            <ActionIcon variant="subtle" color="dark" onClick={() => navigate(-1)}>
-              <IconChevronLeft size={24} />
-            </ActionIcon>
-            <Box>
-              <Text size="xs" c="dimmed">
-                {shifts.length} shifts logged
-              </Text>
-              <Title order={2}>{t('shifts.title')}</Title>
-            </Box>
-          </Group>
-          <ActionIcon variant="default" radius="xl" size="lg">
-            <IconFilter size={20} />
-          </ActionIcon>
-        </Group>
-
-        <Group grow mb="xl">
+        <Group grow mb="xl" mt="md">
           <Box
             style={{
               backgroundColor: 'white',
@@ -90,12 +82,7 @@ export const ShiftListScreen = () => {
           </Box>
         </Group>
 
-        <Box>
-          <Group justify="space-between" mb="sm">
-            <Text fw={700} c="dimmed">
-              Recent Shifts
-            </Text>
-          </Group>
+        <Box mt="md">
 
           <Box
             style={{
@@ -106,7 +93,13 @@ export const ShiftListScreen = () => {
             }}
           >
             {currentMonthShifts.length > 0 ? (
-              currentMonthShifts.map((shift) => <ShiftListItem key={shift.id} shift={shift} />)
+              currentMonthShifts.map((shift) => (
+                <ShiftListItem
+                  key={shift.id}
+                  shift={shift}
+                  onClick={() => handleEditShift(shift.id)}
+                />
+              ))
             ) : (
               <Box py="xl" ta="center">
                 <Text c="dimmed">No shifts this month yet.</Text>
@@ -121,7 +114,7 @@ export const ShiftListScreen = () => {
         radius="xl"
         color="teal.8"
         leftSection={<IconPlus size={20} />}
-        onClick={() => navigate('/shifts/new')}
+        onClick={handleAddShift}
         style={{
           position: 'fixed',
           bottom: 100,
@@ -132,6 +125,20 @@ export const ShiftListScreen = () => {
       >
         {t('shifts.newShift')}
       </Button>
+
+      <Drawer
+        opened={opened}
+        onClose={close}
+        position="bottom"
+        size="90%"
+        radius="lg"
+        padding="xl"
+        styles={{
+          header: { display: 'none' },
+        }}
+      >
+        <ShiftForm shiftId={selectedShiftId} onClose={close} />
+      </Drawer>
     </Box>
   );
 };

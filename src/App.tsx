@@ -7,14 +7,12 @@ import {
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
 } from './constants';
-import { AddShiftScreen } from './screens/AddShiftScreen';
 import { BalanceScreen } from './screens/BalanceScreen';
 import { CompanyManagementScreen } from './screens/CompanyManagementScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 // Screens
 import { OnboardingScreen } from './screens/OnboardingScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
-import { ShiftDetailScreen } from './screens/ShiftDetailScreen';
 import { ShiftListScreen } from './screens/ShiftListScreen';
 import { useAppStore } from './store/useAppStore';
 
@@ -61,8 +59,6 @@ function App() {
                 <Route element={<AppLayout />}>
                   <Route path="/" element={<DashboardScreen />} />
                   <Route path="/shifts" element={<ShiftListScreen />} />
-                  <Route path="/shifts/new" element={<AddShiftScreen />} />
-                  <Route path="/shifts/:id" element={<ShiftDetailScreen />} />
                   <Route path="/balance" element={<BalanceScreen />} />
                   <Route path="/settings" element={<SettingsScreen />} />
                   <Route path="/settings/companies" element={<CompanyManagementScreen />} />

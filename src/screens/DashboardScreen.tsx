@@ -222,7 +222,7 @@ export const DashboardScreen = () => {
         radius="xl"
         color="teal.8"
         leftSection={<IconPlus size={20} />}
-        onClick={() => navigate('/shifts/new')}
+        onClick={() => navigate('/shifts')}
         style={{
           position: 'fixed',
           bottom: 100,
