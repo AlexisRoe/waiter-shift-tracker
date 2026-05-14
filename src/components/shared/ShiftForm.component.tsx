@@ -64,7 +64,6 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
     },
     validate: {
       companyId: (val: string) => (val ? null : t('common.required')),
-      venue: (val: string) => (existingShift ? (val.trim().length > 0 ? null : t('common.required')) : null),
       startTime: (val: string) => (val.trim().length > 0 ? null : t('common.required')),
     },
   });
@@ -170,27 +169,27 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
             </Text>
             <CurrencyDisplay amount={totalPreview} fz={42} fw={800} lh={1.1} mb="lg" />
 
-            <Group gap="xl">
-              <Group gap={4}>
-                <Text size="xs" opacity={0.8}>
-                  Hours ·{' '}
+            <Group grow>
+              <Stack gap={2}>
+                <Text size="xs" opacity={0.7} lh={1}>
+                  {t('shifts.hours')}
                 </Text>
-                <Text size="sm" fw={600}>
+                <Text size="sm" fw={700}>
                   {duration.toFixed(1)}h
                 </Text>
-              </Group>
-              <Group gap={4}>
-                <Text size="xs" opacity={0.8}>
-                  Wage ·{' '}
+              </Stack>
+              <Stack gap={2}>
+                <Text size="xs" opacity={0.7} lh={1}>
+                  {t('shifts.wage')}
                 </Text>
-                <CurrencyDisplay amount={wagePreview} size="sm" fw={600} />
-              </Group>
-              <Group gap={4}>
-                <Text size="xs" opacity={0.8}>
-                  Tips ·{' '}
+                <CurrencyDisplay amount={wagePreview} size="sm" fw={700} />
+              </Stack>
+              <Stack gap={2}>
+                <Text size="xs" opacity={0.7} lh={1}>
+                  {t('shifts.tips')}
                 </Text>
-                <CurrencyDisplay amount={form.values.tips} size="sm" fw={600} />
-              </Group>
+                <CurrencyDisplay amount={form.values.tips} size="sm" fw={700} />
+              </Stack>
             </Group>
           </Box>
         )}
@@ -209,18 +208,10 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
             placeholder={t('shifts.selectCompany')}
             leftSection={<IconBriefcase size={18} />}
             data={companies.map((c) => ({ value: c.id, label: c.name }))}
-            mb={existingShift ? 'md' : 0}
+            mb={0}
             {...form.getInputProps('companyId')}
             onChange={handleCompanyChange}
           />
-
-          {existingShift && (
-            <TextInput
-              label={t('shifts.venue')}
-              leftSection={<IconMapPin size={18} />}
-              {...form.getInputProps('venue')}
-            />
-          )}
         </Box>
 
         <Box
