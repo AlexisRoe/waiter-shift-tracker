@@ -1,0 +1,37 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0f2f5; /* Light gray background for desktop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  max-width: 480px; /* Mobile width cap */
+  max-height: 960px; /* Mobile height cap */
+  background-color: #ffffff;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* Desktop drop shadow */
+  display: flex;
+  flex-direction: column;
+}
+
+/* On smaller screens (actual mobile devices), make it full screen */
+@media (max-width: 480px), (max-height: 600px) {
+  #root {
+    max-width: none;
+    max-height: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
