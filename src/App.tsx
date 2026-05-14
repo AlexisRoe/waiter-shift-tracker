@@ -12,7 +12,6 @@ import { ShiftListScreen } from './screens/ShiftListScreen';
 import { AddShiftScreen } from './screens/AddShiftScreen';
 import { ShiftDetailScreen } from './screens/ShiftDetailScreen';
 import { BalanceScreen } from './screens/BalanceScreen';
-import { AddTipScreen } from './screens/AddTipScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { CompanyManagementScreen } from './screens/CompanyManagementScreen';
 
@@ -62,7 +61,6 @@ function App() {
                   <Route path="/shifts/new" element={<AddShiftScreen />} />
                   <Route path="/shifts/:id" element={<ShiftDetailScreen />} />
                   <Route path="/balance" element={<BalanceScreen />} />
-                  <Route path="/balance/tip" element={<AddTipScreen />} />
                   <Route path="/settings" element={<SettingsScreen />} />
                   <Route path="/settings/companies" element={<CompanyManagementScreen />} />
                 </Route>
