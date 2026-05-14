@@ -9,9 +9,10 @@ import { useAppStore } from '../../store/useAppStore';
 interface AddTipFormProps {
   mode: 'deposit' | 'withdraw';
   onSuccess: () => void;
+  onCancel: () => void;
 }
 
-export const AddTipForm = ({ mode, onSuccess }: AddTipFormProps) => {
+export const AddTipForm = ({ mode, onSuccess, onCancel }: AddTipFormProps) => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
   const addTipTransaction = useAppStore((state) => state.addTipTransaction);
@@ -99,6 +100,10 @@ export const AddTipForm = ({ mode, onSuccess }: AddTipFormProps) => {
 
       <Button type="submit" size="lg" radius="xl" color="teal.8" fullWidth>
         {mode === 'withdraw' ? t('addTip.withdraw') : t('addTip.save')}
+      </Button>
+
+      <Button variant="subtle" color="gray" fullWidth radius="xl" onClick={onCancel} mt="sm">
+        {t('settings.cancel')}
       </Button>
     </form>
   );

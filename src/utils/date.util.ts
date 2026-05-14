@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
+import 'dayjs/locale/de';
 
 dayjs.extend(isBetween);
 dayjs.extend(duration);
+dayjs.locale('de');
 
 /**
  * Formats an ISO date string

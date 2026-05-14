@@ -341,7 +341,7 @@ export const BalanceScreen = () => {
           },
         }}
       >
-        <AddTipForm mode="deposit" onSuccess={closeAdd} />
+        <AddTipForm mode="deposit" onSuccess={closeAdd} onCancel={closeAdd} />
       </Drawer>
 
       {/* Withdraw Tip Drawer */}
@@ -361,7 +361,7 @@ export const BalanceScreen = () => {
           },
         }}
       >
-        <AddTipForm mode="withdraw" onSuccess={closeWithdraw} />
+        <AddTipForm mode="withdraw" onSuccess={closeWithdraw} onCancel={closeWithdraw} />
       </Drawer>
     </Box>
   );

@@ -9,9 +9,10 @@ import { CurrencyDisplay } from './CurrencyDisplay.component';
 interface ShiftListItemProps {
   shift: Shift;
   onClick: () => void;
+  isLast?: boolean;
 }
 
-export const ShiftListItem = ({ shift, onClick }: ShiftListItemProps) => {
+export const ShiftListItem = ({ shift, onClick, isLast }: ShiftListItemProps) => {
   const theme = useMantineTheme();
 
   const duration = calculateDurationHours(shift.startTime, shift.endTime);
@@ -25,7 +26,7 @@ export const ShiftListItem = ({ shift, onClick }: ShiftListItemProps) => {
         display: 'block',
         width: '100%',
         padding: '16px 0',
-        borderBottom: `1px solid ${theme.colors.gray[2]}`,
+        borderBottom: isLast ? 'none' : `1px solid ${theme.colors.gray[2]}`,
       }}
     >
       <Group justify="space-between" align="center" wrap="nowrap">

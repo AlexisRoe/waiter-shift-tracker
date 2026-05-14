@@ -62,7 +62,7 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
     },
     validate: {
       companyId: (val: string) => (val ? null : t('common.required')),
-      venue: (val: string) => (val.trim().length > 0 ? null : t('common.required')),
+      venue: (val: string) => (existingShift ? (val.trim().length > 0 ? null : t('common.required')) : null),
       startTime: (val: string) => (val.trim().length > 0 ? null : t('common.required')),
     },
   });
@@ -116,48 +116,71 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
 
   return (
     <Box>
-      <Title order={3} mb="xl">
-        {existingShift ? t('shifts.editShift') : t('shifts.newShift')}
-      </Title>
-
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Box
-          style={{
-            backgroundColor: theme.colors.teal[8],
-            borderRadius: theme.radius.lg,
-            padding: 24,
-            color: 'white',
-            marginBottom: 24,
-          }}
-        >
-          <Text size="sm" opacity={0.8} mb={4}>
-            {t('shifts.earningsPreview')}
-          </Text>
-          <CurrencyDisplay amount={totalPreview} fz={42} fw={800} lh={1.1} mb="lg" />
-
-          <Group gap="xl">
-            <Group gap={4}>
-              <Text size="xs" opacity={0.8}>
-                Hours ·{' '}
-              </Text>
-              <Text size="sm" fw={600}>
-                {duration.toFixed(1)}h
-              </Text>
-            </Group>
-            <Group gap={4}>
-              <Text size="xs" opacity={0.8}>
-                Wage ·{' '}
-              </Text>
-              <CurrencyDisplay amount={wagePreview} size="sm" fw={600} />
-            </Group>
-            <Group gap={4}>
-              <Text size="xs" opacity={0.8}>
-                Tips ·{' '}
-              </Text>
-              <CurrencyDisplay amount={form.values.tips} size="sm" fw={600} />
-            </Group>
-          </Group>
+      <Box
+        style={{
+          width: 40,
+          height: 4,
+          backgroundColor: theme.colors.gray[3],
+          borderRadius: 2,
+          margin: '0 auto 20px',
+        }}
+      />
+      
+      {companies.length === 0 ? (
+        <Box py="xl" ta="center">
+          <Text mb="md">{t('shifts.noCompanies') || 'Please add a company first.'}</Text>
+          <Button 
+            onClick={() => {
+              onClose();
+              // In a real app we might navigate here, 
+              // for now let's just show the message.
+            }}
+            variant="light"
+          >
+            {t('common.close')}
+          </Button>
         </Box>
+      ) : (
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+        {existingShift && (
+          <Box
+            style={{
+              backgroundColor: theme.colors.teal[8],
+              borderRadius: theme.radius.lg,
+              padding: 24,
+              color: 'white',
+              marginBottom: 24,
+            }}
+          >
+            <Text size="sm" opacity={0.8} mb={4}>
+              {t('shifts.earningsPreview')}
+            </Text>
+            <CurrencyDisplay amount={totalPreview} fz={42} fw={800} lh={1.1} mb="lg" />
+
+            <Group gap="xl">
+              <Group gap={4}>
+                <Text size="xs" opacity={0.8}>
+                  Hours ·{' '}
+                </Text>
+                <Text size="sm" fw={600}>
+                  {duration.toFixed(1)}h
+                </Text>
+              </Group>
+              <Group gap={4}>
+                <Text size="xs" opacity={0.8}>
+                  Wage ·{' '}
+                </Text>
+                <CurrencyDisplay amount={wagePreview} size="sm" fw={600} />
+              </Group>
+              <Group gap={4}>
+                <Text size="xs" opacity={0.8}>
+                  Tips ·{' '}
+                </Text>
+                <CurrencyDisplay amount={form.values.tips} size="sm" fw={600} />
+              </Group>
+            </Group>
+          </Box>
+        )}
 
         <Box
           style={{
@@ -173,16 +196,18 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
             placeholder={t('shifts.selectCompany')}
             leftSection={<IconBriefcase size={18} />}
             data={companies.map((c) => ({ value: c.id, label: c.name }))}
-            mb="md"
+            mb={existingShift ? 'md' : 0}
             {...form.getInputProps('companyId')}
             onChange={handleCompanyChange}
           />
 
-          <TextInput
-            label={t('shifts.venue')}
-            leftSection={<IconMapPin size={18} />}
-            {...form.getInputProps('venue')}
-          />
+          {existingShift && (
+            <TextInput
+              label={t('shifts.venue')}
+              leftSection={<IconMapPin size={18} />}
+              {...form.getInputProps('venue')}
+            />
+          )}
         </Box>
 
         <Box
@@ -208,11 +233,13 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
               leftSection={<IconClock size={18} />}
               {...form.getInputProps('startTime')}
             />
-            <TimeInput
-              label={t('shifts.end')}
-              leftSection={<IconClock size={18} />}
-              {...form.getInputProps('endTime')}
-            />
+            {existingShift && (
+              <TimeInput
+                label={t('shifts.end')}
+                leftSection={<IconClock size={18} />}
+                {...form.getInputProps('endTime')}
+              />
+            )}
           </Group>
         </Box>
 
@@ -228,7 +255,7 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
           <NumberInput
             label={t('shifts.hourlyRate')}
             decimalScale={2}
-            mb="md"
+            mb={existingShift ? 'md' : 0}
             leftSection="€"
             rightSection={
               <Text size="xs" c="dimmed">
@@ -238,13 +265,15 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
             {...form.getInputProps('hourlyRate')}
           />
 
-          <NumberInput
-            label={t('shifts.tipsReceived')}
-            description={t('shifts.tipsNote')}
-            decimalScale={2}
-            leftSection="€"
-            {...form.getInputProps('tips')}
-          />
+          {existingShift && (
+            <NumberInput
+              label={t('shifts.tipsReceived')}
+              description={t('shifts.tipsNote')}
+              decimalScale={2}
+              leftSection="€"
+              {...form.getInputProps('tips')}
+            />
+          )}
         </Box>
 
         <Button type="submit" size="lg" radius="xl" color="teal.8" fullWidth mb="md">
@@ -283,7 +312,12 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
             </Button>
           </Stack>
         )}
-      </form>
+
+        <Button variant="subtle" color="gray" fullWidth radius="xl" onClick={onClose} mt="sm">
+          {t('settings.cancel')}
+        </Button>
+        </form>
+      )}
     </Box>
   );
 };
