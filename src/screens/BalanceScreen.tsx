@@ -160,11 +160,12 @@ export const BalanceScreen = () => {
         {/* Tip Jar Section */}
         <Box
           style={{
-            backgroundColor: theme.colors.yellow[0],
+            backgroundColor: theme.colors.teal[9],
             borderRadius: theme.radius.lg,
             padding: 24,
             marginBottom: 24,
             marginTop: 12,
+            boxShadow: theme.shadows.md,
           }}
         >
           <Group align="flex-start" wrap="nowrap" mb="xl">
@@ -173,8 +174,8 @@ export const BalanceScreen = () => {
                 width: 100,
                 height: 100,
                 borderRadius: '50%',
-                border: `6px solid ${theme.colors.yellow[4]}`,
-                borderRightColor: theme.colors.yellow[2],
+                border: `6px solid ${theme.colors.teal[6]}`,
+                borderRightColor: theme.colors.teal[8],
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -190,21 +191,21 @@ export const BalanceScreen = () => {
             </Box>
 
             <Box style={{ flex: 1 }}>
-              <Text size="xs" fw={700} c="dimmed" mb={4}>
+              <Text size="xs" fw={700} c="teal.1" mb={4} style={{ opacity: 0.8 }}>
                 {t('balance.tipJar')}
               </Text>
-              <Text size="sm" mb="md" lh={1.3} c="dark">
+              <Text size="sm" mb="md" lh={1.3} c="white">
                 {t('balance.tipJarDesc')}
               </Text>
               <Group gap="xs">
-                <Text size="xs" c="dimmed">
-                  <Text span fw={600} c="dark">
+                <Text size="xs" c="teal.1" style={{ opacity: 0.9 }}>
+                  <Text span fw={600} c="white">
                     +{totalIn.toFixed(2)} €
                   </Text>{' '}
                   {t('balance.in')}
                 </Text>
-                <Text size="xs" c="dimmed">
-                  <Text span fw={600} c="dark">
+                <Text size="xs" c="teal.1" style={{ opacity: 0.9 }}>
+                  <Text span fw={600} c="white">
                     {totalOut.toFixed(2)} €
                   </Text>{' '}
                   {t('balance.out')}
@@ -213,49 +214,71 @@ export const BalanceScreen = () => {
             </Box>
           </Group>
 
+          {/* Monthly Earnings Card (Moved inside) */}
+          <Box
+            mb="xl"
+            p="md"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: theme.radius.md,
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+            }}
+          >
+            <Group justify="space-between" align="center">
+              <Stack gap={0}>
+                <Text size="10px" fw={700} c="teal.1" style={{ letterSpacing: 0.5, opacity: 0.8 }}>
+                  {t('balance.monthlyEarnings').toUpperCase()}
+                </Text>
+                <Text size="xs" fw={500} c="white" style={{ opacity: 0.9 }}>
+                  {dayjs().format('MMMM YYYY')} · {t('balance.target')}{' '}
+                  {profile?.maxMonthlyEarnings || 540}€
+                </Text>
+              </Stack>
+              <CurrencyDisplay amount={monthlyTotal} fz={20} fw={800} lh={1} c="white" />
+            </Group>
+          </Box>
+
           <Group grow>
             <Button
-              variant="filled"
-              color="teal.8"
+              variant="outline"
+              color="white"
               radius="xl"
               size="xs"
               leftSection={<IconPlus size={16} />}
               onClick={openAdd}
+              styles={{
+                root: {
+                  borderColor: 'rgba(255,255,255,0.3)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                  },
+                },
+              }}
             >
               {t('balance.addTip')}
             </Button>
             <Button
-              variant="filled"
-              color="dark"
+              variant="outline"
+              color="white"
               radius="xl"
               size="xs"
               leftSection={<IconArrowDown size={16} />}
               onClick={openWithdraw}
+              styles={{
+                root: {
+                  borderColor: 'rgba(255,255,255,0.3)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                  },
+                },
+              }}
             >
               {t('balance.withdrawFromPot')}
             </Button>
           </Group>
         </Box>
 
-        {/* Monthly Earnings Section */}
-        <Box
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.radius.lg,
-            padding: 24,
-            border: `1px solid ${theme.colors.gray[2]}`,
-            marginBottom: 24,
-          }}
-        >
-          <Text size="xs" fw={700} c="dimmed" mb={4}>
-            {t('balance.monthlyEarnings')}
-          </Text>
-          <CurrencyDisplay amount={monthlyTotal} fz={32} fw={800} lh={1.1} />
-          <Text size="sm" c="dimmed">
-            {dayjs().format('MMM YYYY')} · {t('balance.target')}{' '}
-            {profile?.maxMonthlyEarnings || 540}€
-          </Text>
-        </Box>
+
 
         <SegmentedControl
           value={tab}
