@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
+import { DEFAULT_MAX_MONTHLY_EARNINGS, DEFAULT_MIN_HOURLY_WAGE, DEFAULT_LANGUAGE } from '../constants';
 
 export const OnboardingScreen = () => {
   const { t, i18n } = useTranslation();
@@ -15,7 +16,7 @@ export const OnboardingScreen = () => {
       company: '',
       hourlyRate: '' as unknown as number,
       startingTipBudget: 0,
-      language: i18n.language.startsWith('en') ? 'en' : 'de',
+      language: i18n.language.startsWith('en') ? 'en' : DEFAULT_LANGUAGE,
     },
     validate: {
       name: (value: string) => (value.trim().length > 0 ? null : t('common.required')),
@@ -32,6 +33,8 @@ export const OnboardingScreen = () => {
       hourlyRate: Number(values.hourlyRate),
       startingTipBudget: Number(values.startingTipBudget),
       language: values.language as 'de' | 'en',
+      maxMonthlyEarnings: DEFAULT_MAX_MONTHLY_EARNINGS,
+      minHourlyWage: DEFAULT_MIN_HOURLY_WAGE,
     });
     navigate('/');
   };
@@ -87,8 +90,8 @@ export const OnboardingScreen = () => {
               ]}
               {...form.getInputProps('language')}
               onChange={(val) => {
-                form.setFieldValue('language', val || 'de');
-                i18n.changeLanguage(val || 'de');
+                form.setFieldValue('language', val || DEFAULT_LANGUAGE);
+                i18n.changeLanguage(val || DEFAULT_LANGUAGE);
               }}
             />
 

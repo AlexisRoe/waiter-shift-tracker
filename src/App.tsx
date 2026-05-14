@@ -2,6 +2,8 @@ import { AppShell } from '@mantine/core';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout.component';
 import { useAppStore } from './store/useAppStore';
+import { useEffect } from 'react';
+import { DEFAULT_MAX_MONTHLY_EARNINGS, DEFAULT_MIN_HOURLY_WAGE, DEFAULT_LANGUAGE } from './constants';
 
 // Screens
 import { OnboardingScreen } from './screens/OnboardingScreen';
@@ -15,6 +17,24 @@ import { SettingsScreen } from './screens/SettingsScreen';
 
 function App() {
   const isOnboarded = useAppStore((state) => state.isOnboarded);
+  const profile = useAppStore((state) => state.profile);
+  const updateProfile = useAppStore((state) => state.updateProfile);
+
+  useEffect(() => {
+    if (profile) {
+      if (
+        profile.maxMonthlyEarnings === undefined ||
+        profile.minHourlyWage === undefined ||
+        profile.language === undefined
+      ) {
+        updateProfile({
+          maxMonthlyEarnings: profile.maxMonthlyEarnings ?? DEFAULT_MAX_MONTHLY_EARNINGS,
+          minHourlyWage: profile.minHourlyWage ?? DEFAULT_MIN_HOURLY_WAGE,
+          language: profile.language ?? DEFAULT_LANGUAGE,
+        });
+      }
+    }
+  }, [profile, updateProfile]);
 
   return (
     <BrowserRouter>

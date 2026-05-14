@@ -5,6 +5,7 @@ import { IconChevronLeft, IconMail, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
+import { DEFAULT_MAX_MONTHLY_EARNINGS, DEFAULT_MIN_HOURLY_WAGE, DEFAULT_LANGUAGE } from '../constants';
 
 export const SettingsScreen = () => {
   const { t, i18n } = useTranslation();
@@ -23,7 +24,9 @@ export const SettingsScreen = () => {
       company: profile?.company || '',
       hourlyRate: profile?.hourlyRate || 13.5,
       startingTipBudget: profile?.startingTipBudget || 0,
-      language: profile?.language || 'de',
+      language: profile?.language || DEFAULT_LANGUAGE,
+      maxMonthlyEarnings: profile?.maxMonthlyEarnings || DEFAULT_MAX_MONTHLY_EARNINGS,
+      minHourlyWage: profile?.minHourlyWage || DEFAULT_MIN_HOURLY_WAGE,
     },
   });
 
@@ -34,6 +37,8 @@ export const SettingsScreen = () => {
       hourlyRate: Number(values.hourlyRate),
       startingTipBudget: Number(values.startingTipBudget),
       language: values.language as 'de' | 'en',
+      maxMonthlyEarnings: Number(values.maxMonthlyEarnings),
+      minHourlyWage: Number(values.minHourlyWage),
     });
     i18n.changeLanguage(values.language);
   };
@@ -163,25 +168,43 @@ export const SettingsScreen = () => {
             />
           </Box>
 
+          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">{t('settings.advanced')}</Text>
+          <Box
+            style={{
+              backgroundColor: 'white',
+              borderRadius: theme.radius.lg,
+              padding: '8px 20px',
+              border: `1px solid ${theme.colors.gray[2]}`,
+              marginBottom: 24,
+            }}
+          >
+            <NumberInput
+              variant="unstyled"
+              label={t('settings.maxMonthlyEarnings')}
+              decimalScale={2}
+              leftSection="€"
+              {...form.getInputProps('maxMonthlyEarnings')}
+              styles={{ root: { borderBottom: `1px solid ${theme.colors.gray[2]}`, paddingBottom: 16, paddingTop: 8 } }}
+            />
+            <NumberInput
+              variant="unstyled"
+              label={t('settings.minHourlyWage')}
+              decimalScale={2}
+              leftSection="€"
+              {...form.getInputProps('minHourlyWage')}
+              styles={{ root: { borderBottom: `1px solid ${theme.colors.gray[2]}`, paddingBottom: 16, paddingTop: 8 } }}
+            />
+            <Box mt="md" mb="sm">
+              <Button color="red" variant="light" fullWidth onClick={open} type="button">
+                {t('settings.clearAllData')}
+              </Button>
+            </Box>
+          </Box>
+
           <Button type="submit" size="lg" radius="xl" color="teal.8" fullWidth mb="xl">
             {t('common.save')}
           </Button>
         </form>
-
-        <Text size="xs" fw={700} c="red" mb="xs" ml="sm">{t('settings.dangerZone')}</Text>
-        <Box
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.radius.lg,
-            padding: 20,
-            border: `1px solid ${theme.colors.red[2]}`,
-            marginBottom: 24,
-          }}
-        >
-          <Button color="red" variant="light" fullWidth onClick={open}>
-            {t('settings.clearAllData')}
-          </Button>
-        </Box>
 
         <Modal opened={opened} onClose={close} title={t('settings.clearAllData')} centered>
           <Text mb="xl">{t('settings.clearAllDataConfirm')}</Text>

@@ -4,6 +4,8 @@ export interface UserProfile {
   hourlyRate: number;
   startingTipBudget: number;
   language: 'de' | 'en';
+  maxMonthlyEarnings: number;
+  minHourlyWage: number;
 }
 
 export interface Shift {
