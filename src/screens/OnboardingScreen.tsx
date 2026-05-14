@@ -1,0 +1,103 @@
+import { Box, Button, NumberInput, Select, Stack, TextInput, Title, Text, Container } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '../store/useAppStore';
+
+export const OnboardingScreen = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const setProfile = useAppStore((state) => state.setProfile);
+
+  const form = useForm({
+    initialValues: {
+      name: '',
+      company: '',
+      hourlyRate: '' as unknown as number,
+      startingTipBudget: 0,
+      language: i18n.language.startsWith('en') ? 'en' : 'de',
+    },
+    validate: {
+      name: (value: string) => (value.trim().length > 0 ? null : t('common.required')),
+      company: (value: string) => (value.trim().length > 0 ? null : t('common.required')),
+      hourlyRate: (value: number) => (value > 0 ? null : t('common.invalidNumber')),
+    },
+  });
+
+  const handleSubmit = (values: typeof form.values) => {
+    i18n.changeLanguage(values.language);
+    setProfile({
+      name: values.name,
+      company: values.company,
+      hourlyRate: Number(values.hourlyRate),
+      startingTipBudget: Number(values.startingTipBudget),
+      language: values.language as 'de' | 'en',
+    });
+    navigate('/');
+  };
+
+  return (
+    <Container size="sm" p="xl">
+      <Box mt="xl">
+        <Title order={1} mb={8} c="teal.9">
+          {t('onboarding.title')}
+        </Title>
+        <Text c="dimmed" mb="xl">
+          {t('onboarding.subtitle')}
+        </Text>
+
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Stack gap="md">
+            <TextInput
+              withAsterisk
+              label={t('onboarding.name')}
+              placeholder={t('onboarding.namePlaceholder')}
+              {...form.getInputProps('name')}
+            />
+
+            <TextInput
+              withAsterisk
+              label={t('onboarding.company')}
+              placeholder={t('onboarding.companyPlaceholder')}
+              {...form.getInputProps('company')}
+            />
+
+            <NumberInput
+              withAsterisk
+              label={t('onboarding.hourlyRate')}
+              placeholder={t('onboarding.hourlyRatePlaceholder')}
+              min={0}
+              decimalScale={2}
+              {...form.getInputProps('hourlyRate')}
+            />
+
+            <NumberInput
+              label={t('onboarding.startingTipBudget')}
+              placeholder={t('onboarding.startingTipBudgetPlaceholder')}
+              min={0}
+              decimalScale={2}
+              {...form.getInputProps('startingTipBudget')}
+            />
+
+            <Select
+              label={t('onboarding.language')}
+              data={[
+                { value: 'de', label: 'Deutsch' },
+                { value: 'en', label: 'English' },
+              ]}
+              {...form.getInputProps('language')}
+              onChange={(val) => {
+                form.setFieldValue('language', val || 'de');
+                i18n.changeLanguage(val || 'de');
+              }}
+            />
+
+            <Button type="submit" size="lg" mt="xl" color="teal">
+              {t('onboarding.start')}
+            </Button>
+          </Stack>
+        </form>
+      </Box>
+    </Container>
+  );
+};

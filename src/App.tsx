@@ -1,72 +1,57 @@
-import {
-  AppShell,
-  Text,
-  Title,
-  Button,
-  Stack,
-  Container,
-  Paper,
-  Group,
-  useMantineTheme,
-} from '@mantine/core';
+import { AppShell } from '@mantine/core';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { AppLayout } from './components/layout/AppLayout.component';
+import { useAppStore } from './store/useAppStore';
+
+// Screens
+import { OnboardingScreen } from './screens/OnboardingScreen';
+import { DashboardScreen } from './screens/DashboardScreen';
+import { ShiftListScreen } from './screens/ShiftListScreen';
+import { AddShiftScreen } from './screens/AddShiftScreen';
+import { ShiftDetailScreen } from './screens/ShiftDetailScreen';
+import { BalanceScreen } from './screens/BalanceScreen';
+import { AddTipScreen } from './screens/AddTipScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
 
 function App() {
-  const theme = useMantineTheme();
+  const isOnboarded = useAppStore((state) => state.isOnboarded);
 
   return (
-    <AppShell header={{ height: 60 }} padding="md">
-      <AppShell.Header
-        style={{
-          borderBottom: `1px solid ${theme.colors.gray[2]}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+    <BrowserRouter>
+      <AppShell
+        styles={{
+          main: {
+            padding: 0,
+            backgroundColor: '#f8f9fa',
+          },
         }}
       >
-        <Title order={3} c="blue.6">
-          Shift Tracker
-        </Title>
-      </AppShell.Header>
-
-      <AppShell.Main>
-        <Container size="sm" p={0}>
-          <Stack gap="xl" mt="xl">
-            <Paper shadow="sm" radius="md" p="xl" withBorder style={{ textAlign: 'center' }}>
-              <Title order={2} mb="xs">
-                Hello, Waiter!
-              </Title>
-              <Text c="dimmed" mb="lg">
-                Your offline-first PWA for tracking shifts and income.
-              </Text>
-
-              <Button fullWidth size="lg" radius="xl" color="blue">
-                Start New Shift
-              </Button>
-            </Paper>
-
-            <Group grow align="flex-start">
-              <Paper shadow="sm" radius="md" p="md" withBorder>
-                <Text size="sm" c="dimmed" fw={500}>
-                  This Week
-                </Text>
-                <Text size="xl" fw={700}>
-                  €0.00
-                </Text>
-              </Paper>
-
-              <Paper shadow="sm" radius="md" p="md" withBorder>
-                <Text size="sm" c="dimmed" fw={500}>
-                  Hours
-                </Text>
-                <Text size="xl" fw={700}>
-                  0h
-                </Text>
-              </Paper>
-            </Group>
-          </Stack>
-        </Container>
-      </AppShell.Main>
-    </AppShell>
+        <AppShell.Main>
+          <Routes>
+            {!isOnboarded ? (
+              <>
+                <Route path="/onboarding" element={<OnboardingScreen />} />
+                <Route path="*" element={<Navigate to="/onboarding" replace />} />
+              </>
+            ) : (
+              <>
+                <Route element={<AppLayout />}>
+                  <Route path="/" element={<DashboardScreen />} />
+                  <Route path="/shifts" element={<ShiftListScreen />} />
+                  <Route path="/shifts/new" element={<AddShiftScreen />} />
+                  <Route path="/shifts/:id" element={<ShiftDetailScreen />} />
+                  <Route path="/balance" element={<BalanceScreen />} />
+                  <Route path="/balance/tip" element={<AddTipScreen />} />
+                  <Route path="/settings" element={<SettingsScreen />} />
+                </Route>
+                <Route path="/onboarding" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </>
+            )}
+          </Routes>
+        </AppShell.Main>
+      </AppShell>
+    </BrowserRouter>
   );
 }
 
