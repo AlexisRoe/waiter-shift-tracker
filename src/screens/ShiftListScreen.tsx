@@ -14,14 +14,8 @@ export const ShiftListScreen = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedShiftId, setSelectedShiftId] = useState<string | undefined>();
 
-  const {
-    groupedShifts,
-    sortedMonths,
-    totalHours,
-    totalEarnings,
-    plannedShifts,
-    closedShifts,
-  } = useShiftStats();
+  const { groupedShifts, sortedMonths, totalHours, totalEarnings, plannedShifts, closedShifts } =
+    useShiftStats();
 
   const handleAddShift = () => {
     setSelectedShiftId(undefined);

@@ -24,16 +24,8 @@ export const BalanceScreen = () => {
   const [addOpened, { open: openAdd, close: closeAdd }] = useDisclosure(false);
   const [withdrawOpened, { open: openWithdraw, close: closeWithdraw }] = useDisclosure(false);
 
-  const {
-    tab,
-    setTab,
-    profile,
-    currentPot,
-    totalIn,
-    totalOut,
-    monthlyTotal,
-    grouped,
-  } = useBalance();
+  const { tab, setTab, profile, currentPot, totalIn, totalOut, monthlyTotal, grouped } =
+    useBalance();
 
   return (
     <Box pb={100}>
