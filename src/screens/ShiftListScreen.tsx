@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Drawer,
-  Group,
-  Text,
-  useMantineTheme,
-} from '@mantine/core';
+import { Box, Button, Container, Drawer, Group, Text, useMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -45,9 +37,7 @@ export const ShiftListScreen = () => {
     new Set(sortedShifts.map((s) => dayjs(s.date).format('MMMM YYYY'))),
   );
 
-  const currentMonthShifts = shifts.filter((s) =>
-    dayjs(s.date).isSame(dayjs(), 'month'),
-  );
+  const currentMonthShifts = shifts.filter((s) => dayjs(s.date).isSame(dayjs(), 'month'));
 
   const totalHours = currentMonthShifts.reduce(
     (sum, s) => sum + calculateDurationHours(s.startTime, s.endTime),
@@ -57,6 +47,9 @@ export const ShiftListScreen = () => {
     const hours = calculateDurationHours(s.startTime, s.endTime);
     return sum + hours * s.hourlyRate + (s.tips || 0);
   }, 0);
+
+  const plannedShifts = currentMonthShifts.filter((s) => !s.endTime).length;
+  const closedShifts = currentMonthShifts.filter((s) => !!s.endTime).length;
 
   const handleAddShift = () => {
     setSelectedShiftId(undefined);
@@ -82,42 +75,59 @@ export const ShiftListScreen = () => {
             boxShadow: '0 8px 24px rgba(0, 128, 128, 0.15)',
           }}
         >
-          <Group grow align="flex-start">
+          {/* Row 1: Earnings | Hours */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
             <Box>
               <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
                 {t('shifts.thisMonth')}
               </Text>
-              <CurrencyDisplay amount={totalEarnings} size="24px" fw={800} c="white" />
+              <CurrencyDisplay amount={totalEarnings} size="22px" fw={800} c="white" />
             </Box>
-            <Box
-              style={{
-                borderLeft: '1px solid rgba(255,255,255,0.2)',
-                paddingLeft: 20,
-              }}
-            >
+            <Box style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: 16 }}>
               <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
                 {t('shifts.hours')}
               </Text>
-              <Text size="24px" fw={800}>
+              <Text size="22px" fw={800}>
                 {Math.round(totalHours)}h
               </Text>
             </Box>
-          </Group>
+          </div>
+
+          {/* Horizontal divider */}
+          <div
+            style={{
+              height: '1px',
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              margin: '16px 0',
+            }}
+          />
+
+          {/* Row 2: Planned | Closed */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
+            <Box>
+              <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
+                {t('shifts.planned')}
+              </Text>
+              <Text size="22px" fw={800}>
+                {plannedShifts}
+              </Text>
+            </Box>
+            <Box style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: 16 }}>
+              <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
+                {t('shifts.closed')}
+              </Text>
+              <Text size="22px" fw={800}>
+                {closedShifts}
+              </Text>
+            </Box>
+          </div>
         </Box>
 
         <Box mt="md">
           {sortedMonths.length > 0 ? (
             sortedMonths.map((month) => (
               <Box key={month} mb="xl">
-                <Text
-                  fw={700}
-                  size="xs"
-                  c="dimmed"
-                  tt="uppercase"
-                  mb="xs"
-                  ml="md"
-                  lts={1}
-                >
+                <Text fw={700} size="xs" c="dimmed" tt="uppercase" mb="xs" ml="md" lts={1}>
                   {month}
                 </Text>
                 <Box

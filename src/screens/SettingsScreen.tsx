@@ -71,7 +71,6 @@ export const SettingsScreen = () => {
   return (
     <Box pb={100}>
       <Container size="sm" p="md">
-
         <Box
           style={{
             backgroundColor: 'white',

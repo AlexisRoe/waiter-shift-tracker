@@ -278,8 +278,6 @@ export const BalanceScreen = () => {
           </Group>
         </Box>
 
-
-
         <SegmentedControl
           value={tab}
           onChange={setTab}

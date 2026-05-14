@@ -35,6 +35,8 @@
     "title": "My Shifts",
     "thisMonth": "This month",
     "hours": "Hours",
+    "planned": "Planned",
+    "closed": "Closed",
     "newShift": "New shift",
     "saveShift": "Save shift",
     "editShift": "Edit shift",

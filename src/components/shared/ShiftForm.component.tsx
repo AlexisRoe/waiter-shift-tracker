@@ -137,14 +137,14 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
           margin: '0 auto 20px',
         }}
       />
-      
+
       {companies.length === 0 ? (
         <Box py="xl" ta="center">
           <Text mb="md">{t('shifts.noCompanies') || 'Please add a company first.'}</Text>
-          <Button 
+          <Button
             onClick={() => {
               onClose();
-              // In a real app we might navigate here, 
+              // In a real app we might navigate here,
               // for now let's just show the message.
             }}
             variant="light"
@@ -154,180 +154,182 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
         </Box>
       ) : (
         <form onSubmit={form.onSubmit(handleSubmit)}>
-        {existingShift && (
+          {existingShift && (
+            <Box
+              style={{
+                backgroundColor: theme.colors.teal[8],
+                borderRadius: theme.radius.lg,
+                padding: 24,
+                color: 'white',
+                marginBottom: 24,
+              }}
+            >
+              <Text size="sm" opacity={0.8} mb={4}>
+                {t('shifts.earningsPreview')}
+              </Text>
+              <CurrencyDisplay amount={totalPreview} fz={42} fw={800} lh={1.1} mb="lg" />
+
+              <Group grow>
+                <Stack gap={2}>
+                  <Text size="xs" opacity={0.7} lh={1}>
+                    {t('shifts.hours')}
+                  </Text>
+                  <Text size="sm" fw={700}>
+                    {duration.toFixed(1)}h
+                  </Text>
+                </Stack>
+                <Stack gap={2}>
+                  <Text size="xs" opacity={0.7} lh={1}>
+                    {t('shifts.wage')}
+                  </Text>
+                  <CurrencyDisplay amount={wagePreview} size="sm" fw={700} />
+                </Stack>
+                <Stack gap={2}>
+                  <Text size="xs" opacity={0.7} lh={1}>
+                    {t('shifts.tips')}
+                  </Text>
+                  <CurrencyDisplay amount={form.values.tips} size="sm" fw={700} />
+                </Stack>
+              </Group>
+            </Box>
+          )}
+
           <Box
             style={{
-              backgroundColor: theme.colors.teal[8],
+              backgroundColor: 'white',
               borderRadius: theme.radius.lg,
-              padding: 24,
-              color: 'white',
+              padding: 20,
+              border: `1px solid ${theme.colors.gray[2]}`,
+              marginBottom: 16,
+            }}
+          >
+            <Select
+              label={t('shifts.company')}
+              placeholder={t('shifts.selectCompany')}
+              leftSection={<IconBriefcase size={18} />}
+              data={companies.map((c) => ({ value: c.id, label: c.name }))}
+              mb={0}
+              {...form.getInputProps('companyId')}
+              onChange={handleCompanyChange}
+            />
+          </Box>
+
+          <Box
+            style={{
+              backgroundColor: 'white',
+              borderRadius: theme.radius.lg,
+              padding: 20,
+              border: `1px solid ${theme.colors.gray[2]}`,
+              marginBottom: 16,
+            }}
+          >
+            <DatePickerInput
+              label={t('shifts.date')}
+              leftSection={<IconCalendarEvent size={18} />}
+              minDate={minDate}
+              mb="md"
+              {...form.getInputProps('date')}
+            />
+
+            <Group grow>
+              <TimeInput
+                label={t('shifts.start')}
+                leftSection={<IconClock size={18} />}
+                {...form.getInputProps('startTime')}
+              />
+              {existingShift && (
+                <TimeInput
+                  label={t('shifts.end')}
+                  leftSection={<IconClock size={18} />}
+                  {...form.getInputProps('endTime')}
+                />
+              )}
+            </Group>
+          </Box>
+
+          <Box
+            style={{
+              backgroundColor: 'white',
+              borderRadius: theme.radius.lg,
+              padding: 20,
+              border: `1px solid ${theme.colors.gray[2]}`,
               marginBottom: 24,
             }}
           >
-            <Text size="sm" opacity={0.8} mb={4}>
-              {t('shifts.earningsPreview')}
-            </Text>
-            <CurrencyDisplay amount={totalPreview} fz={42} fw={800} lh={1.1} mb="lg" />
-
-            <Group grow>
-              <Stack gap={2}>
-                <Text size="xs" opacity={0.7} lh={1}>
-                  {t('shifts.hours')}
+            <NumberInput
+              label={t('shifts.hourlyRate')}
+              decimalScale={2}
+              mb={existingShift ? 'md' : 0}
+              leftSection="€"
+              rightSection={
+                <Text size="xs" c="dimmed">
+                  /h
                 </Text>
-                <Text size="sm" fw={700}>
-                  {duration.toFixed(1)}h
-                </Text>
-              </Stack>
-              <Stack gap={2}>
-                <Text size="xs" opacity={0.7} lh={1}>
-                  {t('shifts.wage')}
-                </Text>
-                <CurrencyDisplay amount={wagePreview} size="sm" fw={700} />
-              </Stack>
-              <Stack gap={2}>
-                <Text size="xs" opacity={0.7} lh={1}>
-                  {t('shifts.tips')}
-                </Text>
-                <CurrencyDisplay amount={form.values.tips} size="sm" fw={700} />
-              </Stack>
-            </Group>
-          </Box>
-        )}
-
-        <Box
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.radius.lg,
-            padding: 20,
-            border: `1px solid ${theme.colors.gray[2]}`,
-            marginBottom: 16,
-          }}
-        >
-          <Select
-            label={t('shifts.company')}
-            placeholder={t('shifts.selectCompany')}
-            leftSection={<IconBriefcase size={18} />}
-            data={companies.map((c) => ({ value: c.id, label: c.name }))}
-            mb={0}
-            {...form.getInputProps('companyId')}
-            onChange={handleCompanyChange}
-          />
-        </Box>
-
-        <Box
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.radius.lg,
-            padding: 20,
-            border: `1px solid ${theme.colors.gray[2]}`,
-            marginBottom: 16,
-          }}
-        >
-          <DatePickerInput
-            label={t('shifts.date')}
-            leftSection={<IconCalendarEvent size={18} />}
-            minDate={minDate}
-            mb="md"
-            {...form.getInputProps('date')}
-          />
-
-          <Group grow>
-            <TimeInput
-              label={t('shifts.start')}
-              leftSection={<IconClock size={18} />}
-              {...form.getInputProps('startTime')}
+              }
+              {...form.getInputProps('hourlyRate')}
             />
+
             {existingShift && (
-              <TimeInput
-                label={t('shifts.end')}
-                leftSection={<IconClock size={18} />}
-                {...form.getInputProps('endTime')}
+              <NumberInput
+                label={t('shifts.tipsReceived')}
+                description={t('shifts.tipsNote')}
+                decimalScale={2}
+                leftSection="€"
+                {...form.getInputProps('tips')}
               />
             )}
-          </Group>
-        </Box>
+          </Box>
 
-        <Box
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.radius.lg,
-            padding: 20,
-            border: `1px solid ${theme.colors.gray[2]}`,
-            marginBottom: 24,
-          }}
-        >
-          <NumberInput
-            label={t('shifts.hourlyRate')}
-            decimalScale={2}
-            mb={existingShift ? 'md' : 0}
-            leftSection="€"
-            rightSection={
-              <Text size="xs" c="dimmed">
-                /h
-              </Text>
-            }
-            {...form.getInputProps('hourlyRate')}
-          />
+          <Button type="submit" size="lg" radius="xl" color="teal.8" fullWidth mb="md">
+            {existingShift ? t('common.save') : t('shifts.saveShift')}
+          </Button>
+
+          {!existingShift && (
+            <Stack gap="md" mb="md">
+              <Button
+                variant="light"
+                color="teal"
+                radius="xl"
+                leftSection={<IconBrandGoogle size={18} />}
+                onClick={() =>
+                  window.open(generateGoogleCalendarUrl(getShiftDataForCalendar()), '_blank')
+                }
+              >
+                {t('shifts.addToGoogleCalendar')}
+              </Button>
+              <Button
+                variant="light"
+                color="teal"
+                radius="xl"
+                leftSection={<IconDownload size={18} />}
+                onClick={() => {
+                  const s = getShiftDataForCalendar();
+                  downloadIcsFile(generateIcsContent(s), `shift-${s.date}`);
+                }}
+              >
+                {t('shifts.downloadIcs')}
+              </Button>
+            </Stack>
+          )}
 
           {existingShift && (
-            <NumberInput
-              label={t('shifts.tipsReceived')}
-              description={t('shifts.tipsNote')}
-              decimalScale={2}
-              leftSection="€"
-              {...form.getInputProps('tips')}
-            />
+            <Stack gap="md" mb="xl">
+              <Button
+                variant="subtle"
+                color="red"
+                fullWidth
+                radius="xl"
+                leftSection={<IconTrash size={18} />}
+                onClick={handleDelete}
+              >
+                {t('shifts.deleteShift')}
+              </Button>
+            </Stack>
           )}
-        </Box>
 
-        <Button type="submit" size="lg" radius="xl" color="teal.8" fullWidth mb="md">
-          {existingShift ? t('common.save') : t('shifts.saveShift')}
-        </Button>
-
-        {!existingShift && (
-          <Stack gap="md" mb="md">
-            <Button
-              variant="light"
-              color="teal"
-              radius="xl"
-              leftSection={<IconBrandGoogle size={18} />}
-              onClick={() => window.open(generateGoogleCalendarUrl(getShiftDataForCalendar()), '_blank')}
-            >
-              {t('shifts.addToGoogleCalendar')}
-            </Button>
-            <Button
-              variant="light"
-              color="teal"
-              radius="xl"
-              leftSection={<IconDownload size={18} />}
-              onClick={() => {
-                const s = getShiftDataForCalendar();
-                downloadIcsFile(generateIcsContent(s), `shift-${s.date}`);
-              }}
-            >
-              {t('shifts.downloadIcs')}
-            </Button>
-          </Stack>
-        )}
-
-        {existingShift && (
-          <Stack gap="md" mb="xl">
-            <Button
-              variant="subtle"
-              color="red"
-              fullWidth
-              radius="xl"
-              leftSection={<IconTrash size={18} />}
-              onClick={handleDelete}
-            >
-              {t('shifts.deleteShift')}
-            </Button>
-          </Stack>
-        )}
-
-        <Button variant="subtle" color="gray" fullWidth radius="xl" onClick={onClose} mt="sm">
-          {t('settings.cancel')}
-        </Button>
+          <Button variant="subtle" color="gray" fullWidth radius="xl" onClick={onClose} mt="sm">
+            {t('settings.cancel')}
+          </Button>
         </form>
       )}
     </Box>
