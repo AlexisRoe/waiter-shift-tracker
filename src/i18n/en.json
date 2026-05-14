@@ -52,8 +52,8 @@
     "tips": "Tips",
     "completeShift": "Complete shift",
     "deleteShift": "Delete shift",
-    "addToGoogleCalendar": "Add to Google Calendar",
-    "downloadIcs": "Download for Apple Calendar (.ics)",
+    "addToGoogleCalendar": "Google Calendar",
+    "downloadIcs": "Apple / ICS",
     "notEnded": "Not ended yet"
   },
   "balance": {

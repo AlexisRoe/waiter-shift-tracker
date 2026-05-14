@@ -18,6 +18,8 @@ import {
   IconClock,
   IconMapPin,
   IconTrash,
+  IconBrandGoogle,
+  IconDownload,
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -111,6 +113,17 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
       onClose();
     }
   };
+
+  const getShiftDataForCalendar = (): Shift => ({
+    id: existingShift?.id || 'temp',
+    date: dayjs(form.values.date).format('YYYY-MM-DD'),
+    startTime: form.values.startTime,
+    endTime: form.values.endTime || undefined,
+    companyId: form.values.companyId,
+    venue: form.values.venue,
+    hourlyRate: Number(form.values.hourlyRate),
+    tips: Number(form.values.tips) || 0,
+  });
 
   const minDate = dayjs().subtract(1, 'year').toDate();
 
@@ -280,26 +293,34 @@ export const ShiftForm = ({ shiftId, onClose }: ShiftFormProps) => {
           {existingShift ? t('common.save') : t('shifts.saveShift')}
         </Button>
 
-        {existingShift && (
-          <Stack gap="md" mb="xl">
+        {!existingShift && (
+          <Stack gap="md" mb="md">
             <Button
               variant="light"
               color="teal"
               radius="xl"
-              onClick={() => window.open(generateGoogleCalendarUrl(existingShift), '_blank')}
+              leftSection={<IconBrandGoogle size={18} />}
+              onClick={() => window.open(generateGoogleCalendarUrl(getShiftDataForCalendar()), '_blank')}
             >
               {t('shifts.addToGoogleCalendar')}
             </Button>
             <Button
-              variant="outline"
+              variant="light"
               color="teal"
               radius="xl"
-              onClick={() =>
-                downloadIcsFile(generateIcsContent(existingShift), `shift-${existingShift.date}`)
-              }
+              leftSection={<IconDownload size={18} />}
+              onClick={() => {
+                const s = getShiftDataForCalendar();
+                downloadIcsFile(generateIcsContent(s), `shift-${s.date}`);
+              }}
             >
               {t('shifts.downloadIcs')}
             </Button>
+          </Stack>
+        )}
+
+        {existingShift && (
+          <Stack gap="md" mb="xl">
             <Button
               variant="subtle"
               color="red"

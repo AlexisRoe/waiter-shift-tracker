@@ -52,8 +52,8 @@
     "tips": "Trinkgeld",
     "completeShift": "Schicht abschließen",
     "deleteShift": "Schicht löschen",
-    "addToGoogleCalendar": "Zu Google Kalender hinzufügen",
-    "downloadIcs": "Für Apple Kalender herunterladen (.ics)",
+    "addToGoogleCalendar": "Google Kalender",
+    "downloadIcs": "Apple / ICS",
     "notEnded": "Noch nicht beendet"
   },
   "balance": {
