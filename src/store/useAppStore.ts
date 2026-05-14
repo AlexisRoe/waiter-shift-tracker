@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AppState, Shift, TipTransaction, UserProfile } from './types';
+import type { AppState, Company, Shift, TipTransaction, UserProfile } from './types';
 
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       profile: null,
+      companies: [],
       shifts: [],
       tipTransactions: [],
       isOnboarded: false,
@@ -16,6 +17,24 @@ export const useAppStore = create<AppState>()(
       updateProfile: (updates: Partial<UserProfile>) =>
         set((state) => ({
           profile: state.profile ? { ...state.profile, ...updates } : null,
+        })),
+
+      addCompany: (company: Company) =>
+        set((state) => ({ companies: [...state.companies, company] })),
+
+      updateCompany: (id: string, updates: Partial<Company>) =>
+        set((state) => ({
+          companies: state.companies.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+        })),
+
+      deleteCompany: (id: string) =>
+        set((state) => ({
+          companies: state.companies.filter((c) => c.id !== id),
+        })),
+
+      setDefaultCompany: (id: string) =>
+        set((state) => ({
+          profile: state.profile ? { ...state.profile, defaultCompanyId: id } : null,
         })),
 
       addShift: (shift: Shift) =>
@@ -39,6 +58,7 @@ export const useAppStore = create<AppState>()(
       clearAllData: () =>
         set(() => ({
           profile: null,
+          companies: [],
           shifts: [],
           tipTransactions: [],
           isOnboarded: false,

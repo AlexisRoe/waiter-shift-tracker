@@ -14,6 +14,7 @@ import { ShiftDetailScreen } from './screens/ShiftDetailScreen';
 import { BalanceScreen } from './screens/BalanceScreen';
 import { AddTipScreen } from './screens/AddTipScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
+import { CompanyManagementScreen } from './screens/CompanyManagementScreen';
 
 function App() {
   const isOnboarded = useAppStore((state) => state.isOnboarded);
@@ -63,6 +64,7 @@ function App() {
                   <Route path="/balance" element={<BalanceScreen />} />
                   <Route path="/balance/tip" element={<AddTipScreen />} />
                   <Route path="/settings" element={<SettingsScreen />} />
+                  <Route path="/settings/companies" element={<CompanyManagementScreen />} />
                 </Route>
                 <Route path="/onboarding" element={<Navigate to="/" replace />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

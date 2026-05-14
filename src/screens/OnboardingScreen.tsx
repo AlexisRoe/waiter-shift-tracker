@@ -25,12 +25,23 @@ export const OnboardingScreen = () => {
     },
   });
 
+  const addCompany = useAppStore((state) => state.addCompany);
+
   const handleSubmit = (values: typeof form.values) => {
+    const companyId = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11);
+    const newCompany = {
+      id: companyId,
+      name: values.company,
+      hourlyRate: Number(values.hourlyRate),
+      createdAt: new Date().toISOString(),
+    };
+
+    addCompany(newCompany);
     i18n.changeLanguage(values.language);
+    
     setProfile({
       name: values.name,
-      company: values.company,
-      hourlyRate: Number(values.hourlyRate),
+      defaultCompanyId: companyId,
       startingTipBudget: Number(values.startingTipBudget),
       language: values.language as 'de' | 'en',
       maxMonthlyEarnings: DEFAULT_MAX_MONTHLY_EARNINGS,

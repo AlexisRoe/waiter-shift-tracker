@@ -1,7 +1,7 @@
-import { ActionIcon, Box, Button, Container, Group, NumberInput, TextInput, Title, Text, useMantineTheme } from '@mantine/core';
+import { ActionIcon, Box, Button, Container, Group, NumberInput, Select, TextInput, Title, Text, useMantineTheme } from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { IconChevronLeft, IconClock, IconMapPin, IconCalendarEvent } from '@tabler/icons-react';
+import { IconChevronLeft, IconClock, IconMapPin, IconCalendarEvent, IconBriefcase } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -15,23 +15,23 @@ export const AddShiftScreen = () => {
   const navigate = useNavigate();
   
   const profile = useAppStore((state) => state.profile);
-  const shifts = useAppStore((state) => state.shifts);
+  const companies = useAppStore((state) => state.companies);
   const addShift = useAppStore((state) => state.addShift);
 
-  const lastShift = shifts.length > 0 ? shifts[shifts.length - 1] : null;
-  const defaultVenue = lastShift?.venue || profile?.company || '';
-  const defaultHourlyRate = profile?.hourlyRate || 13.5;
+  const defaultCompany = companies.find(c => c.id === profile?.defaultCompanyId) || companies[0];
 
   const form = useForm({
     initialValues: {
-      venue: defaultVenue,
+      companyId: defaultCompany?.id || '',
+      venue: defaultCompany?.name || '',
       date: new Date(),
       startTime: '17:00',
       endTime: '',
-      hourlyRate: defaultHourlyRate,
+      hourlyRate: defaultCompany?.hourlyRate || 13.5,
       tips: 0,
     },
     validate: {
+      companyId: (val: string) => (val ? null : t('common.required')),
       venue: (val: string) => (val.trim().length > 0 ? null : t('common.required')),
       startTime: (val: string) => (val.trim().length > 0 ? null : t('common.required')),
     },
@@ -43,10 +43,11 @@ export const AddShiftScreen = () => {
 
   const handleSubmit = (values: typeof form.values) => {
     const newShift = {
-      id: crypto.randomUUID(),
+      id: typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11),
       date: dayjs(values.date).format('YYYY-MM-DD'),
       startTime: values.startTime,
       endTime: values.endTime || undefined,
+      companyId: values.companyId,
       venue: values.venue,
       hourlyRate: Number(values.hourlyRate),
       tips: Number(values.tips) || 0,
@@ -54,6 +55,18 @@ export const AddShiftScreen = () => {
     
     addShift(newShift);
     navigate('/shifts');
+  };
+
+  const handleCompanyChange = (id: string | null) => {
+    if (!id) return;
+    const company = companies.find(c => c.id === id);
+    if (company) {
+      form.setValues({
+        companyId: id,
+        venue: company.name,
+        hourlyRate: company.hourlyRate,
+      });
+    }
   };
 
   const minDate = dayjs().startOf('month').toDate();
@@ -108,6 +121,16 @@ export const AddShiftScreen = () => {
               marginBottom: 16,
             }}
           >
+            <Select
+              label={t('shifts.company')}
+              placeholder={t('shifts.selectCompany')}
+              leftSection={<IconBriefcase size={18} />}
+              data={companies.map(c => ({ value: c.id, label: c.name }))}
+              mb="md"
+              {...form.getInputProps('companyId')}
+              onChange={handleCompanyChange}
+            />
+
             <TextInput
               label={t('shifts.venue')}
               leftSection={<IconMapPin size={18} />}
