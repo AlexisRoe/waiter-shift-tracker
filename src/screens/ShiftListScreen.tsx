@@ -1,55 +1,27 @@
 import { Box, Button, Container, Drawer, Group, Text, useMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
-import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { ShiftForm } from '../components/shared/ShiftForm.component';
 import { ShiftListItem } from '../components/shared/ShiftListItem.component';
-import { useAppStore } from '../store/useAppStore';
-import { calculateDurationHours } from '../utils/date.util';
+import { useShiftStats } from '../hooks/useShiftStats.hook';
 
 export const ShiftListScreen = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
-  const shifts = useAppStore((state) => state.shifts);
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedShiftId, setSelectedShiftId] = useState<string | undefined>();
 
-  const sortedShifts = [...shifts].sort(
-    (a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf(),
-  );
-
-  const groupedShifts = sortedShifts.reduce(
-    (acc, shift) => {
-      const monthYear = dayjs(shift.date).format('MMMM YYYY');
-      if (!acc[monthYear]) {
-        acc[monthYear] = [];
-      }
-      acc[monthYear].push(shift);
-      return acc;
-    },
-    {} as Record<string, typeof shifts>,
-  );
-
-  const sortedMonths = Array.from(
-    new Set(sortedShifts.map((s) => dayjs(s.date).format('MMMM YYYY'))),
-  );
-
-  const currentMonthShifts = shifts.filter((s) => dayjs(s.date).isSame(dayjs(), 'month'));
-
-  const totalHours = currentMonthShifts.reduce(
-    (sum, s) => sum + calculateDurationHours(s.startTime, s.endTime),
-    0,
-  );
-  const totalEarnings = currentMonthShifts.reduce((sum, s) => {
-    const hours = calculateDurationHours(s.startTime, s.endTime);
-    return sum + hours * s.hourlyRate + (s.tips || 0);
-  }, 0);
-
-  const plannedShifts = currentMonthShifts.filter((s) => !s.endTime).length;
-  const closedShifts = currentMonthShifts.filter((s) => !!s.endTime).length;
+  const {
+    groupedShifts,
+    sortedMonths,
+    totalHours,
+    totalEarnings,
+    plannedShifts,
+    closedShifts,
+  } = useShiftStats();
 
   const handleAddShift = () => {
     setSelectedShiftId(undefined);

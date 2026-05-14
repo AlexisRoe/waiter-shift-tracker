@@ -12,147 +12,28 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowDown, IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddTipForm } from '../components/shared/AddTipForm.component';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
-import { useAppStore } from '../store/useAppStore';
-import { calculateDurationHours } from '../utils/date.util';
-
-interface UnifiedTransaction {
-  id: string;
-  date: string;
-  amount: number;
-  type: 'wage' | 'shiftTip' | 'manualTip' | 'withdrawal';
-  label: string;
-  subLabel?: string;
-}
+import { useBalance } from '../hooks/useBalance.hook';
 
 export const BalanceScreen = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
 
-  const shifts = useAppStore((state) => state.shifts) || [];
-  const tipTransactions = useAppStore((state) => state.tipTransactions) || [];
-  const profile = useAppStore((state) => state.profile);
-
-  const [tab, setTab] = useState('All');
-
   const [addOpened, { open: openAdd, close: closeAdd }] = useDisclosure(false);
   const [withdrawOpened, { open: openWithdraw, close: closeWithdraw }] = useDisclosure(false);
 
-  // Derived data with safety
-  const currentMonthShifts = useMemo(
-    () => shifts.filter((s) => s?.date && dayjs(s.date).isSame(dayjs(), 'month')),
-    [shifts],
-  );
-
-  const monthlyWage = useMemo(
-    () =>
-      currentMonthShifts.reduce((sum, s) => {
-        return sum + calculateDurationHours(s.startTime, s.endTime) * (s.hourlyRate || 0);
-      }, 0),
-    [currentMonthShifts],
-  );
-
-  const monthlyTips = useMemo(
-    () => currentMonthShifts.reduce((sum, s) => sum + (s.tips || 0), 0),
-    [currentMonthShifts],
-  );
-
-  const monthlyTotal = monthlyWage + monthlyTips;
-
-  // Calculate tip jar
-  const initialPot = profile?.startingTipBudget || 0;
-  const tipsFromShiftsTotal = useMemo(
-    () => shifts.reduce((sum, s) => sum + (s.tips || 0), 0),
-    [shifts],
-  );
-
-  const externalTipsSum = useMemo(
-    () => tipTransactions.reduce((sum, t) => sum + (t.amount || 0), 0),
-    [tipTransactions],
-  );
-
-  const currentPot = initialPot + tipsFromShiftsTotal + externalTipsSum;
-  const totalIn =
-    initialPot +
-    tipsFromShiftsTotal +
-    tipTransactions.filter((t) => (t.amount || 0) > 0).reduce((s, t) => s + (t.amount || 0), 0);
-  const totalOut = tipTransactions
-    .filter((t) => (t.amount || 0) < 0)
-    .reduce((s, t) => s + (t.amount || 0), 0);
-
-  // Unified list of all transactions
-  const allTransactions = useMemo(() => {
-    const list: UnifiedTransaction[] = [];
-
-    // Add shift-related transactions
-    shifts.forEach((s) => {
-      if (!s?.endTime) return;
-
-      const duration = calculateDurationHours(s.startTime, s.endTime);
-      const wage = duration * (s.hourlyRate || 0);
-
-      list.push({
-        id: `wage-${s.id}`,
-        date: s.date,
-        amount: wage,
-        type: 'wage',
-        label: t('balance.shiftWage'),
-        subLabel: s.venue,
-      });
-
-      if ((s.tips || 0) > 0) {
-        list.push({
-          id: `tip-${s.id}`,
-          date: s.date,
-          amount: s.tips || 0,
-          type: 'shiftTip',
-          label: t('balance.shiftTip'),
-          subLabel: s.venue,
-        });
-      }
-    });
-
-    // Add manual transactions
-    tipTransactions.forEach((tt) => {
-      if (!tt) return;
-      list.push({
-        id: tt.id,
-        date: tt.date,
-        amount: tt.amount || 0,
-        type: (tt.amount || 0) >= 0 ? 'manualTip' : 'withdrawal',
-        label: (tt.amount || 0) >= 0 ? t('balance.manualTip') : t('balance.withdrawal'),
-        subLabel: tt.note,
-      });
-    });
-
-    return list.sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
-  }, [shifts, tipTransactions, t]);
-
-  // Filter based on tab
-  const filteredTransactions = useMemo(() => {
-    return allTransactions.filter((tx) => {
-      if (tab === 'All') return true;
-      if (tab === 'Shifts') return tx.type === 'wage';
-      if (tab === 'Tips') return tx.type !== 'wage';
-      return true;
-    });
-  }, [allTransactions, tab]);
-
-  // Group by month
-  const grouped = useMemo(() => {
-    return filteredTransactions.reduce(
-      (acc, tx) => {
-        const month = dayjs(tx.date).format('MMMM YYYY').toUpperCase();
-        if (!acc[month]) acc[month] = [];
-        acc[month].push(tx);
-        return acc;
-      },
-      {} as Record<string, UnifiedTransaction[]>,
-    );
-  }, [filteredTransactions]);
+  const {
+    tab,
+    setTab,
+    profile,
+    currentPot,
+    totalIn,
+    totalOut,
+    monthlyTotal,
+    grouped,
+  } = useBalance();
 
   return (
     <Box pb={100}>
