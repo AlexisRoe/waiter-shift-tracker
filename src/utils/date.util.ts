@@ -21,10 +21,7 @@ export const formatDate = (date: string, format = 'DD.MM.YYYY'): string => {
  * @param endTime End time "HH:mm"
  * @returns Duration in hours
  */
-export const calculateDurationHours = (
-  startTime: string,
-  endTime?: string
-): number => {
+export const calculateDurationHours = (startTime: string, endTime?: string): number => {
   if (!endTime) return 0;
 
   const start = dayjs(`2000-01-01T${startTime}`);

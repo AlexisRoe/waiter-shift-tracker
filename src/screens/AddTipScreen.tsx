@@ -1,4 +1,15 @@
-import { ActionIcon, Box, Button, Container, Group, NumberInput, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Group,
+  NumberInput,
+  Text,
+  TextInput,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconCalendarEvent, IconChevronLeft } from '@tabler/icons-react';
@@ -29,14 +40,14 @@ export const AddTipScreen = () => {
 
   const handleSubmit = (values: typeof form.values) => {
     const amount = mode === 'withdraw' ? -Math.abs(values.amount) : Math.abs(values.amount);
-    
+
     addTipTransaction({
       id: crypto.randomUUID(),
       date: dayjs(values.date).format('YYYY-MM-DD'),
       amount,
       note: values.note,
     });
-    
+
     navigate(-1);
   };
 
@@ -66,13 +77,17 @@ export const AddTipScreen = () => {
             <Text size="xs" fw={700} c="dimmed" mb="md" style={{ textTransform: 'uppercase' }}>
               {t('addTip.amount')}
             </Text>
-            
+
             <NumberInput
               variant="unstyled"
               size="xl"
               decimalScale={2}
               hideControls
-              leftSection={<Text size="32px" c="dimmed">€</Text>}
+              leftSection={
+                <Text size="32px" c="dimmed">
+                  €
+                </Text>
+              }
               styles={{
                 input: { fontSize: 48, fontWeight: 800, textAlign: 'center', height: 60 },
               }}

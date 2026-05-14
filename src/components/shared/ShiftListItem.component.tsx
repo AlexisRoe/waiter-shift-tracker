@@ -57,7 +57,7 @@ export const ShiftListItem = ({ shift }: ShiftListItemProps) => {
             )}
           </Group>
         </Box>
-        
+
         <IconChevronRight size={18} color={theme.colors.gray[4]} stroke={2} />
       </Group>
     </UnstyledButton>

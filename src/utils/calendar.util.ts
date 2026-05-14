@@ -9,9 +9,7 @@ import type { Shift } from '../store/types';
 export const generateGoogleCalendarUrl = (shift: Shift): string => {
   const start = dayjs(`${shift.date}T${shift.startTime}`);
   // If no end time, assume 1 hour duration for the calendar event
-  let end = shift.endTime
-    ? dayjs(`${shift.date}T${shift.endTime}`)
-    : start.add(1, 'hour');
+  let end = shift.endTime ? dayjs(`${shift.date}T${shift.endTime}`) : start.add(1, 'hour');
 
   // Handle shift spanning midnight
   if (end.isBefore(start)) {
@@ -38,9 +36,7 @@ export const generateGoogleCalendarUrl = (shift: Shift): string => {
  */
 export const generateIcsContent = (shift: Shift): string => {
   const start = dayjs(`${shift.date}T${shift.startTime}`);
-  let end = shift.endTime
-    ? dayjs(`${shift.date}T${shift.endTime}`)
-    : start.add(1, 'hour');
+  let end = shift.endTime ? dayjs(`${shift.date}T${shift.endTime}`) : start.add(1, 'hour');
 
   if (end.isBefore(start)) {
     end = end.add(1, 'day');

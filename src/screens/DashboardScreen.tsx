@@ -1,4 +1,13 @@
-import { Box, Button, Container, Group, SegmentedControl, Text, ThemeIcon, useMantineTheme } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Container,
+  Group,
+  SegmentedControl,
+  Text,
+  ThemeIcon,
+  useMantineTheme,
+} from '@mantine/core';
 import { IconPlus, IconTrendingUp } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -24,7 +33,7 @@ export const DashboardScreen = () => {
   const currentMonthShifts = shifts.filter((s) => dayjs(s.date).isSame(dayjs(), 'month'));
   const totalHours = currentMonthShifts.reduce(
     (sum, s) => sum + calculateDurationHours(s.startTime, s.endTime),
-    0
+    0,
   );
   const totalEarnings = currentMonthShifts.reduce((sum, s) => {
     const hours = calculateDurationHours(s.startTime, s.endTime);
@@ -38,7 +47,9 @@ export const DashboardScreen = () => {
 
   // Mock data for charts to match screenshots visually
   const trendData = Array.from({ length: 14 }).map((_, i) => ({
-    date: dayjs().subtract(13 - i, 'day').format('MMM D'),
+    date: dayjs()
+      .subtract(13 - i, 'day')
+      .format('MMM D'),
     value: Math.random() * 100 + 50,
   }));
 
@@ -116,9 +127,7 @@ export const DashboardScreen = () => {
         </Group>
 
         <Group grow align="flex-start">
-          <Box
-            style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 16, padding: 12 }}
-          >
+          <Box style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 16, padding: 12 }}>
             <Text size="xs" opacity={0.8} mb={4}>
               {t('dashboard.shifts')}
             </Text>
@@ -126,9 +135,7 @@ export const DashboardScreen = () => {
               {currentMonthShifts.length}
             </Text>
           </Box>
-          <Box
-            style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 16, padding: 12 }}
-          >
+          <Box style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 16, padding: 12 }}>
             <Text size="xs" opacity={0.8} mb={4}>
               {t('dashboard.hours')}
             </Text>
@@ -136,9 +143,7 @@ export const DashboardScreen = () => {
               {Math.round(totalHours)}h
             </Text>
           </Box>
-          <Box
-            style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 16, padding: 12 }}
-          >
+          <Box style={{ backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 16, padding: 12 }}>
             <Text size="xs" opacity={0.8} mb={4}>
               {t('dashboard.avgHour')}
             </Text>

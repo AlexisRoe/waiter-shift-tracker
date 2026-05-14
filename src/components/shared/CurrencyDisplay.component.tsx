@@ -7,9 +7,5 @@ interface CurrencyDisplayProps extends TextProps {
 }
 
 export const CurrencyDisplay = ({ amount, showSign = false, ...props }: CurrencyDisplayProps) => {
-  return (
-    <Text {...props}>
-      {formatCurrency(amount, showSign)}
-    </Text>
-  );
+  return <Text {...props}>{formatCurrency(amount, showSign)}</Text>;
 };

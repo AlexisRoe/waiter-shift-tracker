@@ -3,7 +3,11 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout.component';
 import { useAppStore } from './store/useAppStore';
 import { useEffect } from 'react';
-import { DEFAULT_MAX_MONTHLY_EARNINGS, DEFAULT_MIN_HOURLY_WAGE, DEFAULT_LANGUAGE } from './constants';
+import {
+  DEFAULT_MAX_MONTHLY_EARNINGS,
+  DEFAULT_MIN_HOURLY_WAGE,
+  DEFAULT_LANGUAGE,
+} from './constants';
 
 // Screens
 import { OnboardingScreen } from './screens/OnboardingScreen';

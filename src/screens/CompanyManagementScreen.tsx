@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
-import { 
-  ActionIcon, 
-  Box, 
-  Button, 
-  Container, 
-  Group, 
-  Drawer, 
-  NumberInput, 
-  Stack, 
-  Text, 
-  TextInput, 
-  Title, 
-  Card, 
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Group,
+  Drawer,
+  NumberInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+  Card,
   Badge,
   Paper,
-  Divider
+  Divider,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { 
-  IconChevronLeft, 
-  IconPlus, 
-  IconTrash, 
-  IconEdit, 
-  IconStar, 
-  IconStarFilled, 
-  IconBriefcase 
+import {
+  IconChevronLeft,
+  IconPlus,
+  IconTrash,
+  IconEdit,
+  IconStar,
+  IconStarFilled,
+  IconBriefcase,
 } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,7 @@ export const CompanyManagementScreen = () => {
   const form = useForm({
     initialValues: {
       name: '',
-      hourlyRate: 14.60,
+      hourlyRate: 14.6,
     },
     validate: {
       name: (val) => (val.trim().length > 0 ? null : t('common.required')),
@@ -60,7 +60,7 @@ export const CompanyManagementScreen = () => {
   const handleAdd = () => {
     setEditingCompany(null);
     form.reset();
-    form.setValues({ name: '', hourlyRate: 14.60 });
+    form.setValues({ name: '', hourlyRate: 14.6 });
     open();
   };
 
@@ -78,7 +78,10 @@ export const CompanyManagementScreen = () => {
       });
     } else {
       const newCompany: Company = {
-        id: typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11),
+        id:
+          typeof crypto.randomUUID === 'function'
+            ? crypto.randomUUID()
+            : Math.random().toString(36).substring(2, 11),
         name: values.name,
         hourlyRate: values.hourlyRate,
         createdAt: new Date().toISOString(),
@@ -96,17 +99,19 @@ export const CompanyManagementScreen = () => {
     <Box style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
       <Container size="sm" p="md">
         <Group align="center" mt="md" mb="xl">
-          <ActionIcon variant="subtle" color="dark" onClick={() => navigate(-1)} size="lg" radius="xl">
+          <ActionIcon
+            variant="subtle"
+            color="dark"
+            onClick={() => navigate(-1)}
+            size="lg"
+            radius="xl"
+          >
             <IconChevronLeft size={24} />
           </ActionIcon>
-          <Title order={2} style={{ flex: 1 }}>{t('settings.manageCompanies')}</Title>
-          <ActionIcon 
-            variant="filled" 
-            color="teal.8" 
-            size="lg" 
-            radius="xl" 
-            onClick={handleAdd}
-          >
+          <Title order={2} style={{ flex: 1 }}>
+            {t('settings.manageCompanies')}
+          </Title>
+          <ActionIcon variant="filled" color="teal.8" size="lg" radius="xl" onClick={handleAdd}>
             <IconPlus size={20} />
           </ActionIcon>
         </Group>
@@ -117,7 +122,14 @@ export const CompanyManagementScreen = () => {
             const deletable = isDeletable(company.id);
 
             return (
-              <Card key={company.id} withBorder radius="lg" p="md" shadow="xs" style={{ backgroundColor: 'white' }}>
+              <Card
+                key={company.id}
+                withBorder
+                radius="lg"
+                p="md"
+                shadow="xs"
+                style={{ backgroundColor: 'white' }}
+              >
                 <Group justify="space-between" align="flex-start" wrap="nowrap">
                   <Box style={{ flex: 1 }}>
                     <Group gap="xs" mb={4}>
@@ -125,7 +137,11 @@ export const CompanyManagementScreen = () => {
                         {company.name}
                       </Text>
                       {isDefault && (
-                        <Badge color="teal" variant="light" leftSection={<IconStarFilled size={12} />}>
+                        <Badge
+                          color="teal"
+                          variant="light"
+                          leftSection={<IconStarFilled size={12} />}
+                        >
                           {t('settings.default')}
                         </Badge>
                       )}
@@ -137,9 +153,9 @@ export const CompanyManagementScreen = () => {
 
                   <Group gap={4}>
                     {!isDefault && (
-                      <ActionIcon 
-                        variant="subtle" 
-                        color="gray" 
+                      <ActionIcon
+                        variant="subtle"
+                        color="gray"
                         onClick={() => setDefaultCompany(company.id)}
                         title={t('settings.setAsDefault')}
                         radius="md"
@@ -147,17 +163,17 @@ export const CompanyManagementScreen = () => {
                         <IconStar size={18} />
                       </ActionIcon>
                     )}
-                    <ActionIcon 
-                      variant="subtle" 
-                      color="blue" 
+                    <ActionIcon
+                      variant="subtle"
+                      color="blue"
                       onClick={() => handleEdit(company)}
                       radius="md"
                     >
                       <IconEdit size={18} />
                     </ActionIcon>
-                    <ActionIcon 
-                      variant="subtle" 
-                      color="red" 
+                    <ActionIcon
+                      variant="subtle"
+                      color="red"
                       disabled={!deletable || isDefault}
                       onClick={() => deleteCompany(company.id)}
                       title={!deletable ? t('settings.cannotDeleteWithShifts') : ''}
@@ -173,9 +189,17 @@ export const CompanyManagementScreen = () => {
         </Stack>
 
         {companies.length === 0 && (
-          <Paper withBorder radius="lg" p={40} style={{ textAlign: 'center', backgroundColor: 'white', borderStyle: 'dashed' }} mt="xl">
+          <Paper
+            withBorder
+            radius="lg"
+            p={40}
+            style={{ textAlign: 'center', backgroundColor: 'white', borderStyle: 'dashed' }}
+            mt="xl"
+          >
             <IconBriefcase size={48} opacity={0.2} style={{ marginBottom: 16 }} />
-            <Text c="dimmed" fw={500}>{t('settings.noCompaniesYet')}</Text>
+            <Text c="dimmed" fw={500}>
+              {t('settings.noCompaniesYet')}
+            </Text>
           </Paper>
         )}
       </Container>
@@ -193,18 +217,18 @@ export const CompanyManagementScreen = () => {
         }
         padding="xl"
         styles={{
-          content: { 
-            borderTopLeftRadius: 32, 
+          content: {
+            borderTopLeftRadius: 32,
             borderTopRightRadius: 32,
-            boxShadow: '0 -10px 30px rgba(0,0,0,0.1)'
+            boxShadow: '0 -10px 30px rgba(0,0,0,0.1)',
           },
           inner: {
-            zIndex: 2000
-          }
+            zIndex: 2000,
+          },
         }}
         overlayProps={{
           backgroundOpacity: 0.5,
-          blur: 2
+          blur: 2,
         }}
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -217,7 +241,7 @@ export const CompanyManagementScreen = () => {
               size="md"
               {...form.getInputProps('name')}
             />
-            
+
             <NumberInput
               label={t('onboarding.hourlySalary')}
               placeholder="13.50"
@@ -225,28 +249,19 @@ export const CompanyManagementScreen = () => {
               withAsterisk
               radius="md"
               size="md"
-              leftSection={<Text size="sm" fw={600}>€</Text>}
+              leftSection={
+                <Text size="sm" fw={600}>
+                  €
+                </Text>
+              }
               {...form.getInputProps('hourlyRate')}
             />
 
-            <Button 
-              type="submit" 
-              color="teal.8" 
-              radius="xl" 
-              size="lg" 
-              fullWidth 
-              mt="md"
-            >
+            <Button type="submit" color="teal.8" radius="xl" size="lg" fullWidth mt="md">
               {editingCompany ? t('common.save') : t('common.add')}
             </Button>
-            
-            <Button 
-              variant="subtle" 
-              color="gray" 
-              onClick={close} 
-              fullWidth
-              radius="xl"
-            >
+
+            <Button variant="subtle" color="gray" onClick={close} fullWidth radius="xl">
               {t('settings.cancel')}
             </Button>
           </Stack>

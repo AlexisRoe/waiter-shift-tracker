@@ -1,7 +1,25 @@
-import { ActionIcon, Box, Button, Container, Group, NumberInput, Select, TextInput, Title, Text, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Group,
+  NumberInput,
+  Select,
+  TextInput,
+  Title,
+  Text,
+  useMantineTheme,
+} from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { IconChevronLeft, IconClock, IconMapPin, IconCalendarEvent, IconBriefcase } from '@tabler/icons-react';
+import {
+  IconChevronLeft,
+  IconClock,
+  IconMapPin,
+  IconCalendarEvent,
+  IconBriefcase,
+} from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -13,12 +31,12 @@ export const AddShiftScreen = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
   const navigate = useNavigate();
-  
+
   const profile = useAppStore((state) => state.profile);
   const companies = useAppStore((state) => state.companies);
   const addShift = useAppStore((state) => state.addShift);
 
-  const defaultCompany = companies.find(c => c.id === profile?.defaultCompanyId) || companies[0];
+  const defaultCompany = companies.find((c) => c.id === profile?.defaultCompanyId) || companies[0];
 
   const form = useForm({
     initialValues: {
@@ -43,7 +61,10 @@ export const AddShiftScreen = () => {
 
   const handleSubmit = (values: typeof form.values) => {
     const newShift = {
-      id: typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11),
+      id:
+        typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : Math.random().toString(36).substring(2, 11),
       date: dayjs(values.date).format('YYYY-MM-DD'),
       startTime: values.startTime,
       endTime: values.endTime || undefined,
@@ -52,14 +73,14 @@ export const AddShiftScreen = () => {
       hourlyRate: Number(values.hourlyRate),
       tips: Number(values.tips) || 0,
     };
-    
+
     addShift(newShift);
     navigate('/shifts');
   };
 
   const handleCompanyChange = (id: string | null) => {
     if (!id) return;
-    const company = companies.find(c => c.id === id);
+    const company = companies.find((c) => c.id === id);
     if (company) {
       form.setValues({
         companyId: id,
@@ -98,15 +119,23 @@ export const AddShiftScreen = () => {
 
             <Group gap="xl">
               <Group gap={4}>
-                <Text size="xs" opacity={0.8}>Hours · </Text>
-                <Text size="sm" fw={600}>{duration.toFixed(1)}h</Text>
+                <Text size="xs" opacity={0.8}>
+                  Hours ·{' '}
+                </Text>
+                <Text size="sm" fw={600}>
+                  {duration.toFixed(1)}h
+                </Text>
               </Group>
               <Group gap={4}>
-                <Text size="xs" opacity={0.8}>Wage · </Text>
+                <Text size="xs" opacity={0.8}>
+                  Wage ·{' '}
+                </Text>
                 <CurrencyDisplay amount={wagePreview} size="sm" fw={600} />
               </Group>
               <Group gap={4}>
-                <Text size="xs" opacity={0.8}>Tips · </Text>
+                <Text size="xs" opacity={0.8}>
+                  Tips ·{' '}
+                </Text>
                 <CurrencyDisplay amount={form.values.tips} size="sm" fw={600} />
               </Group>
             </Group>
@@ -125,7 +154,7 @@ export const AddShiftScreen = () => {
               label={t('shifts.company')}
               placeholder={t('shifts.selectCompany')}
               leftSection={<IconBriefcase size={18} />}
-              data={companies.map(c => ({ value: c.id, label: c.name }))}
+              data={companies.map((c) => ({ value: c.id, label: c.name }))}
               mb="md"
               {...form.getInputProps('companyId')}
               onChange={handleCompanyChange}
@@ -154,7 +183,7 @@ export const AddShiftScreen = () => {
               mb="md"
               {...form.getInputProps('date')}
             />
-            
+
             <Group grow>
               <TimeInput
                 label={t('shifts.start')}
@@ -183,7 +212,11 @@ export const AddShiftScreen = () => {
               decimalScale={2}
               mb="md"
               leftSection="€"
-              rightSection={<Text size="xs" c="dimmed">/h</Text>}
+              rightSection={
+                <Text size="xs" c="dimmed">
+                  /h
+                </Text>
+              }
               {...form.getInputProps('hourlyRate')}
             />
 

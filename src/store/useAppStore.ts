@@ -11,8 +11,7 @@ export const useAppStore = create<AppState>()(
       tipTransactions: [],
       isOnboarded: false,
 
-      setProfile: (profile: UserProfile) =>
-        set(() => ({ profile, isOnboarded: true })),
+      setProfile: (profile: UserProfile) => set(() => ({ profile, isOnboarded: true })),
 
       updateProfile: (updates: Partial<UserProfile>) =>
         set((state) => ({
@@ -37,8 +36,7 @@ export const useAppStore = create<AppState>()(
           profile: state.profile ? { ...state.profile, defaultCompanyId: id } : null,
         })),
 
-      addShift: (shift: Shift) =>
-        set((state) => ({ shifts: [...state.shifts, shift] })),
+      addShift: (shift: Shift) => set((state) => ({ shifts: [...state.shifts, shift] })),
 
       updateShift: (id: string, updates: Partial<Shift>) =>
         set((state) => ({
@@ -66,6 +64,6 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'waiter-shift-tracker-storage',
-    }
-  )
+    },
+  ),
 );

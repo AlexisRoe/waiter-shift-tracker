@@ -29,14 +29,14 @@ export const AddTipForm = ({ mode, onSuccess }: AddTipFormProps) => {
 
   const handleSubmit = (values: typeof form.values) => {
     const amount = mode === 'withdraw' ? -Math.abs(values.amount) : Math.abs(values.amount);
-    
+
     addTipTransaction({
       id: crypto.randomUUID(),
       date: dayjs(values.date).format('YYYY-MM-DD'),
       amount,
       note: values.note,
     });
-    
+
     onSuccess();
   };
 
@@ -55,7 +55,7 @@ export const AddTipForm = ({ mode, onSuccess }: AddTipFormProps) => {
         <Text size="xs" fw={700} c="dimmed" mb="xs" style={{ textTransform: 'uppercase' }}>
           {t('addTip.amount')}
         </Text>
-        
+
         <NumberInput
           variant="unstyled"
           size="xl"

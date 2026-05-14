@@ -1,11 +1,37 @@
-import { ActionIcon, Box, Button, Container, Group, NumberInput, Select, Text, TextInput, ThemeIcon, Title, useMantineTheme, Drawer, UnstyledButton, Stack } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Group,
+  NumberInput,
+  Select,
+  Text,
+  TextInput,
+  ThemeIcon,
+  Title,
+  useMantineTheme,
+  Drawer,
+  UnstyledButton,
+  Stack,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { IconChevronLeft, IconChevronRight, IconMail, IconUser, IconBriefcase } from '@tabler/icons-react';
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconMail,
+  IconUser,
+  IconBriefcase,
+} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { DEFAULT_MAX_MONTHLY_EARNINGS, DEFAULT_MIN_HOURLY_WAGE, DEFAULT_LANGUAGE } from '../constants';
+import {
+  DEFAULT_MAX_MONTHLY_EARNINGS,
+  DEFAULT_MIN_HOURLY_WAGE,
+  DEFAULT_LANGUAGE,
+} from '../constants';
 
 export const SettingsScreen = () => {
   const { t, i18n } = useTranslation();
@@ -19,7 +45,7 @@ export const SettingsScreen = () => {
 
   const [opened, { open, close }] = useDisclosure(false);
 
-  const defaultCompany = companies.find(c => c.id === profile?.defaultCompanyId) || companies[0];
+  const defaultCompany = companies.find((c) => c.id === profile?.defaultCompanyId) || companies[0];
 
   const form = useForm({
     initialValues: {
@@ -74,13 +100,35 @@ export const SettingsScreen = () => {
               </Text>
             </ThemeIcon>
             <Box>
-              <Text fw={700} size="lg">{profile?.name}</Text>
-              <Text size="sm" c="dimmed" mb="xs">{profile?.name.toLowerCase().replace(' ', '.')}@email.com</Text>
+              <Text fw={700} size="lg">
+                {profile?.name}
+              </Text>
+              <Text size="sm" c="dimmed" mb="xs">
+                {profile?.name.toLowerCase().replace(' ', '.')}@email.com
+              </Text>
               <Group gap="xs">
-                <Box style={{ backgroundColor: theme.colors.teal[0], color: theme.colors.teal[8], padding: '2px 8px', borderRadius: 12, fontSize: 12, fontWeight: 600 }}>
+                <Box
+                  style={{
+                    backgroundColor: theme.colors.teal[0],
+                    color: theme.colors.teal[8],
+                    padding: '2px 8px',
+                    borderRadius: 12,
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
+                >
                   {defaultCompany?.name || t('settings.noCompany')}
                 </Box>
-                <Box style={{ backgroundColor: theme.colors.gray[1], color: theme.colors.gray[7], padding: '2px 8px', borderRadius: 12, fontSize: 12, fontWeight: 600 }}>
+                <Box
+                  style={{
+                    backgroundColor: theme.colors.gray[1],
+                    color: theme.colors.gray[7],
+                    padding: '2px 8px',
+                    borderRadius: 12,
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
+                >
                   {t('settings.since', { date: 'Mar 2026' })}
                 </Box>
               </Group>
@@ -89,7 +137,9 @@ export const SettingsScreen = () => {
         </Box>
 
         <form onSubmit={form.onSubmit(handleSave)}>
-          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">{t('settings.account')}</Text>
+          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
+            {t('settings.account')}
+          </Text>
           <Box
             style={{
               backgroundColor: 'white',
@@ -108,7 +158,9 @@ export const SettingsScreen = () => {
             />
           </Box>
 
-          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">{t('settings.companies')}</Text>
+          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
+            {t('settings.companies')}
+          </Text>
           <Box
             style={{
               backgroundColor: 'white',
@@ -118,7 +170,7 @@ export const SettingsScreen = () => {
               marginBottom: 24,
             }}
           >
-            <UnstyledButton 
+            <UnstyledButton
               onClick={() => navigate('/settings/companies')}
               style={{ width: '100%', padding: '16px 0' }}
             >
@@ -128,8 +180,12 @@ export const SettingsScreen = () => {
                     <IconBriefcase size={18} />
                   </ThemeIcon>
                   <Box>
-                    <Text size="sm" fw={600}>{t('settings.manageCompanies')}</Text>
-                    <Text size="xs" c="dimmed">{companies.length} {t('settings.companiesCount')}</Text>
+                    <Text size="sm" fw={600}>
+                      {t('settings.manageCompanies')}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      {companies.length} {t('settings.companiesCount')}
+                    </Text>
                   </Box>
                 </Group>
                 <IconChevronRight size={18} color={theme.colors.gray[5]} />
@@ -137,7 +193,9 @@ export const SettingsScreen = () => {
             </UnstyledButton>
           </Box>
 
-          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">{t('settings.payDefaults')}</Text>
+          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
+            {t('settings.payDefaults')}
+          </Text>
           <Box
             style={{
               backgroundColor: 'white',
@@ -158,7 +216,9 @@ export const SettingsScreen = () => {
             />
           </Box>
 
-          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">{t('settings.app')}</Text>
+          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
+            {t('settings.app')}
+          </Text>
           <Box
             style={{
               backgroundColor: 'white',
@@ -180,7 +240,9 @@ export const SettingsScreen = () => {
             />
           </Box>
 
-          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">{t('settings.advanced')}</Text>
+          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
+            {t('settings.advanced')}
+          </Text>
           <Box
             style={{
               backgroundColor: 'white',
@@ -196,7 +258,13 @@ export const SettingsScreen = () => {
               decimalScale={2}
               leftSection="€"
               {...form.getInputProps('maxMonthlyEarnings')}
-              styles={{ root: { borderBottom: `1px solid ${theme.colors.gray[2]}`, paddingBottom: 16, paddingTop: 8 } }}
+              styles={{
+                root: {
+                  borderBottom: `1px solid ${theme.colors.gray[2]}`,
+                  paddingBottom: 16,
+                  paddingTop: 8,
+                },
+              }}
             />
             <NumberInput
               variant="unstyled"
@@ -204,7 +272,13 @@ export const SettingsScreen = () => {
               decimalScale={2}
               leftSection="€"
               {...form.getInputProps('minHourlyWage')}
-              styles={{ root: { borderBottom: `1px solid ${theme.colors.gray[2]}`, paddingBottom: 16, paddingTop: 8 } }}
+              styles={{
+                root: {
+                  borderBottom: `1px solid ${theme.colors.gray[2]}`,
+                  paddingBottom: 16,
+                  paddingTop: 8,
+                },
+              }}
             />
             <Box mt="md" mb="sm">
               <Button color="red" variant="light" fullWidth onClick={open} type="button">
@@ -218,29 +292,31 @@ export const SettingsScreen = () => {
           </Button>
         </form>
 
-        <Drawer 
-          opened={opened} 
-          onClose={close} 
+        <Drawer
+          opened={opened}
+          onClose={close}
           title={
-            <Text fw={700} c="red">{t('settings.clearAllData')}</Text>
-          } 
+            <Text fw={700} c="red">
+              {t('settings.clearAllData')}
+            </Text>
+          }
           position="bottom"
           size="auto"
           withinPortal={false}
           padding="xl"
           styles={{
-            content: { 
-              borderTopLeftRadius: 32, 
+            content: {
+              borderTopLeftRadius: 32,
               borderTopRightRadius: 32,
-              boxShadow: '0 -10px 30px rgba(0,0,0,0.1)'
-            }
+              boxShadow: '0 -10px 30px rgba(0,0,0,0.1)',
+            },
           }}
         >
           <Stack gap="xl" pb="xl">
             <Text size="sm" c="dimmed">
               {t('settings.clearAllDataConfirm')}
             </Text>
-            
+
             <Group grow>
               <Button variant="subtle" color="gray" onClick={close} radius="xl">
                 {t('settings.cancel')}
@@ -251,7 +327,6 @@ export const SettingsScreen = () => {
             </Group>
           </Stack>
         </Drawer>
-
       </Container>
     </Box>
   );

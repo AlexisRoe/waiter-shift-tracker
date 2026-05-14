@@ -1,4 +1,16 @@
-import { ActionIcon, Box, Button, Container, Drawer, Group, SegmentedControl, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Drawer,
+  Group,
+  SegmentedControl,
+  Stack,
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowDown, IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -27,45 +39,51 @@ export const BalanceScreen = () => {
   const profile = useAppStore((state) => state.profile);
 
   const [tab, setTab] = useState('All');
-  
+
   const [addOpened, { open: openAdd, close: closeAdd }] = useDisclosure(false);
   const [withdrawOpened, { open: openWithdraw, close: closeWithdraw }] = useDisclosure(false);
 
   // Derived data with safety
-  const currentMonthShifts = useMemo(() => 
-    shifts.filter((s) => s && s.date && dayjs(s.date).isSame(dayjs(), 'month')),
-    [shifts]
+  const currentMonthShifts = useMemo(
+    () => shifts.filter((s) => s && s.date && dayjs(s.date).isSame(dayjs(), 'month')),
+    [shifts],
   );
 
-  const monthlyWage = useMemo(() => 
-    currentMonthShifts.reduce((sum, s) => {
-      return sum + calculateDurationHours(s.startTime, s.endTime) * (s.hourlyRate || 0);
-    }, 0),
-    [currentMonthShifts]
+  const monthlyWage = useMemo(
+    () =>
+      currentMonthShifts.reduce((sum, s) => {
+        return sum + calculateDurationHours(s.startTime, s.endTime) * (s.hourlyRate || 0);
+      }, 0),
+    [currentMonthShifts],
   );
 
-  const monthlyTips = useMemo(() => 
-    currentMonthShifts.reduce((sum, s) => sum + (s.tips || 0), 0),
-    [currentMonthShifts]
+  const monthlyTips = useMemo(
+    () => currentMonthShifts.reduce((sum, s) => sum + (s.tips || 0), 0),
+    [currentMonthShifts],
   );
 
   const monthlyTotal = monthlyWage + monthlyTips;
 
   // Calculate tip jar
   const initialPot = profile?.startingTipBudget || 0;
-  const tipsFromShiftsTotal = useMemo(() => 
-    shifts.reduce((sum, s) => sum + (s.tips || 0), 0),
-    [shifts]
+  const tipsFromShiftsTotal = useMemo(
+    () => shifts.reduce((sum, s) => sum + (s.tips || 0), 0),
+    [shifts],
   );
-  
-  const externalTipsSum = useMemo(() => 
-    tipTransactions.reduce((sum, t) => sum + (t.amount || 0), 0),
-    [tipTransactions]
+
+  const externalTipsSum = useMemo(
+    () => tipTransactions.reduce((sum, t) => sum + (t.amount || 0), 0),
+    [tipTransactions],
   );
-  
+
   const currentPot = initialPot + tipsFromShiftsTotal + externalTipsSum;
-  const totalIn = initialPot + tipsFromShiftsTotal + tipTransactions.filter(t => (t.amount || 0) > 0).reduce((s,t) => s+(t.amount || 0), 0);
-  const totalOut = tipTransactions.filter(t => (t.amount || 0) < 0).reduce((s,t) => s+(t.amount || 0), 0);
+  const totalIn =
+    initialPot +
+    tipsFromShiftsTotal +
+    tipTransactions.filter((t) => (t.amount || 0) > 0).reduce((s, t) => s + (t.amount || 0), 0);
+  const totalOut = tipTransactions
+    .filter((t) => (t.amount || 0) < 0)
+    .reduce((s, t) => s + (t.amount || 0), 0);
 
   // Unified list of all transactions
   const allTransactions = useMemo(() => {
@@ -74,10 +92,10 @@ export const BalanceScreen = () => {
     // Add shift-related transactions
     shifts.forEach((s) => {
       if (!s || !s.endTime) return;
-      
+
       const duration = calculateDurationHours(s.startTime, s.endTime);
       const wage = duration * (s.hourlyRate || 0);
-      
+
       list.push({
         id: `wage-${s.id}`,
         date: s.date,
@@ -117,7 +135,7 @@ export const BalanceScreen = () => {
 
   // Filter based on tab
   const filteredTransactions = useMemo(() => {
-    return allTransactions.filter(tx => {
+    return allTransactions.filter((tx) => {
       if (tab === 'All') return true;
       if (tab === 'Shifts') return tx.type === 'wage';
       if (tab === 'Tips') return tx.type !== 'wage';
@@ -127,12 +145,15 @@ export const BalanceScreen = () => {
 
   // Group by month
   const grouped = useMemo(() => {
-    return filteredTransactions.reduce((acc, tx) => {
-      const month = dayjs(tx.date).format('MMMM YYYY').toUpperCase();
-      if (!acc[month]) acc[month] = [];
-      acc[month].push(tx);
-      return acc;
-    }, {} as Record<string, UnifiedTransaction[]>);
+    return filteredTransactions.reduce(
+      (acc, tx) => {
+        const month = dayjs(tx.date).format('MMMM YYYY').toUpperCase();
+        if (!acc[month]) acc[month] = [];
+        acc[month].push(tx);
+        return acc;
+      },
+      {} as Record<string, UnifiedTransaction[]>,
+    );
   }, [filteredTransactions]);
 
   return (
@@ -169,7 +190,7 @@ export const BalanceScreen = () => {
                 {t('balance.inThePot')}
               </Text>
             </Box>
-            
+
             <Box style={{ flex: 1 }}>
               <Text size="xs" fw={700} c="dimmed" mb={4}>
                 {t('balance.tipJar')}
@@ -179,31 +200,37 @@ export const BalanceScreen = () => {
               </Text>
               <Group gap="xs">
                 <Text size="xs" c="dimmed">
-                  <Text span fw={600} c="dark">+{totalIn.toFixed(2)} €</Text> {t('balance.in')}
+                  <Text span fw={600} c="dark">
+                    +{totalIn.toFixed(2)} €
+                  </Text>{' '}
+                  {t('balance.in')}
                 </Text>
                 <Text size="xs" c="dimmed">
-                  <Text span fw={600} c="dark">{totalOut.toFixed(2)} €</Text> {t('balance.out')}
+                  <Text span fw={600} c="dark">
+                    {totalOut.toFixed(2)} €
+                  </Text>{' '}
+                  {t('balance.out')}
                 </Text>
               </Group>
             </Box>
           </Group>
 
           <Group grow>
-            <Button 
-              variant="filled" 
-              color="teal.8" 
-              radius="xl" 
-              size="xs" 
+            <Button
+              variant="filled"
+              color="teal.8"
+              radius="xl"
+              size="xs"
               leftSection={<IconPlus size={16} />}
               onClick={openAdd}
             >
               {t('balance.addTip')}
             </Button>
-            <Button 
-              variant="filled" 
-              color="dark" 
-              radius="xl" 
-              size="xs" 
+            <Button
+              variant="filled"
+              color="dark"
+              radius="xl"
+              size="xs"
               leftSection={<IconArrowDown size={16} />}
               onClick={openWithdraw}
             >
@@ -227,7 +254,8 @@ export const BalanceScreen = () => {
           </Text>
           <CurrencyDisplay amount={monthlyTotal} fz={32} fw={800} lh={1.1} />
           <Text size="sm" c="dimmed">
-            {dayjs().format('MMM YYYY')} · {t('balance.target')} {profile?.maxMonthlyEarnings || 540}€
+            {dayjs().format('MMM YYYY')} · {t('balance.target')}{' '}
+            {profile?.maxMonthlyEarnings || 540}€
           </Text>
         </Box>
 
@@ -246,7 +274,9 @@ export const BalanceScreen = () => {
 
         {Object.keys(grouped).length === 0 ? (
           <Stack align="center" py={40} gap="xs">
-            <Text fw={600} c="dimmed">{t('balance.noTransactions')}</Text>
+            <Text fw={600} c="dimmed">
+              {t('balance.noTransactions')}
+            </Text>
             <Text size="sm" c="dimmed" ta="center" px="xl">
               {t('balance.emptyState')}
             </Text>
@@ -259,25 +289,34 @@ export const BalanceScreen = () => {
               </Text>
               <Stack gap="xs">
                 {txs.map((tx) => (
-                  <Group 
-                    key={tx.id} 
-                    justify="space-between" 
-                    p="md" 
-                    style={{ 
-                      backgroundColor: 'white', 
+                  <Group
+                    key={tx.id}
+                    justify="space-between"
+                    p="md"
+                    style={{
+                      backgroundColor: 'white',
                       borderRadius: theme.radius.md,
-                      border: `1px solid ${theme.colors.gray[1]}`
+                      border: `1px solid ${theme.colors.gray[1]}`,
                     }}
                   >
                     <Box>
-                      <Text fw={600} size="sm">{tx.label}</Text>
+                      <Text fw={600} size="sm">
+                        {tx.label}
+                      </Text>
                       <Group gap={6}>
-                        <Text size="xs" c="dimmed">{dayjs(tx.date).format('DD.MM.YYYY')}</Text>
-                        {tx.subLabel && <Text size="xs" c="dimmed">· {tx.subLabel}</Text>}
+                        <Text size="xs" c="dimmed">
+                          {dayjs(tx.date).format('DD.MM.YYYY')}
+                        </Text>
+                        {tx.subLabel && (
+                          <Text size="xs" c="dimmed">
+                            · {tx.subLabel}
+                          </Text>
+                        )}
                       </Group>
                     </Box>
                     <Text fw={700} c={tx.amount < 0 ? 'red.7' : 'teal.8'}>
-                      {tx.amount < 0 ? '-' : '+'}{Math.abs(tx.amount).toFixed(2)} €
+                      {tx.amount < 0 ? '-' : '+'}
+                      {Math.abs(tx.amount).toFixed(2)} €
                     </Text>
                   </Group>
                 ))}
@@ -297,11 +336,11 @@ export const BalanceScreen = () => {
         withinPortal={false}
         padding="xl"
         styles={{
-          content: { 
-            borderTopLeftRadius: 32, 
+          content: {
+            borderTopLeftRadius: 32,
             borderTopRightRadius: 32,
-            boxShadow: '0 -10px 30px rgba(0,0,0,0.1)'
-          }
+            boxShadow: '0 -10px 30px rgba(0,0,0,0.1)',
+          },
         }}
       >
         <AddTipForm mode="deposit" onSuccess={closeAdd} />
@@ -317,11 +356,11 @@ export const BalanceScreen = () => {
         withinPortal={false}
         padding="xl"
         styles={{
-          content: { 
-            borderTopLeftRadius: 32, 
+          content: {
+            borderTopLeftRadius: 32,
             borderTopRightRadius: 32,
-            boxShadow: '0 -10px 30px rgba(0,0,0,0.1)'
-          }
+            boxShadow: '0 -10px 30px rgba(0,0,0,0.1)',
+          },
         }}
       >
         <AddTipForm mode="withdraw" onSuccess={closeWithdraw} />

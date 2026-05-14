@@ -18,7 +18,7 @@ export const AppLayout = () => {
 
   // Onboarding screens or other full-screen pages might hide navigation
   // For now, assume it's always shown if rendered in AppLayout
-  
+
   return (
     <Box
       style={{
@@ -59,9 +59,7 @@ export const AppLayout = () => {
       >
         {navItems.map((item) => {
           const isActive =
-            item.path === '/'
-              ? location.pathname === '/'
-              : location.pathname.startsWith(item.path);
+            item.path === '/' ? location.pathname === '/' : location.pathname.startsWith(item.path);
 
           return (
             <UnstyledButton

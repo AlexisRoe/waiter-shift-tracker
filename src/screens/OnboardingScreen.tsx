@@ -1,9 +1,23 @@
-import { Box, Button, NumberInput, Select, Stack, TextInput, Title, Text, Container } from '@mantine/core';
+import {
+  Box,
+  Button,
+  NumberInput,
+  Select,
+  Stack,
+  TextInput,
+  Title,
+  Text,
+  Container,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { DEFAULT_MAX_MONTHLY_EARNINGS, DEFAULT_MIN_HOURLY_WAGE, DEFAULT_LANGUAGE } from '../constants';
+import {
+  DEFAULT_MAX_MONTHLY_EARNINGS,
+  DEFAULT_MIN_HOURLY_WAGE,
+  DEFAULT_LANGUAGE,
+} from '../constants';
 
 export const OnboardingScreen = () => {
   const { t, i18n } = useTranslation();
@@ -28,7 +42,10 @@ export const OnboardingScreen = () => {
   const addCompany = useAppStore((state) => state.addCompany);
 
   const handleSubmit = (values: typeof form.values) => {
-    const companyId = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11);
+    const companyId =
+      typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : Math.random().toString(36).substring(2, 11);
     const newCompany = {
       id: companyId,
       name: values.company,
@@ -38,7 +55,7 @@ export const OnboardingScreen = () => {
 
     addCompany(newCompany);
     i18n.changeLanguage(values.language);
-    
+
     setProfile({
       name: values.name,
       defaultCompanyId: companyId,
@@ -86,7 +103,11 @@ export const OnboardingScreen = () => {
               thousandSeparator="."
               decimalSeparator=","
               leftSection="€"
-              rightSection={<Text size="xs" c="dimmed">/h</Text>}
+              rightSection={
+                <Text size="xs" c="dimmed">
+                  /h
+                </Text>
+              }
               {...form.getInputProps('hourlyRate')}
             />
 

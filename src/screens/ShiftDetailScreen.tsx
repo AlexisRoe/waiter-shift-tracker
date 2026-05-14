@@ -1,4 +1,15 @@
-import { ActionIcon, Box, Button, Container, Group, NumberInput, Text, Title, useMantineTheme, Stack } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Group,
+  NumberInput,
+  Text,
+  Title,
+  useMantineTheme,
+  Stack,
+} from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconChevronLeft, IconClock, IconTrash } from '@tabler/icons-react';
@@ -8,7 +19,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { useAppStore } from '../store/useAppStore';
 import { calculateDurationHours } from '../utils/date.util';
-import { generateGoogleCalendarUrl, generateIcsContent, downloadIcsFile } from '../utils/calendar.util';
+import {
+  generateGoogleCalendarUrl,
+  generateIcsContent,
+  downloadIcsFile,
+} from '../utils/calendar.util';
 
 export const ShiftDetailScreen = () => {
   const { id } = useParams();
@@ -83,15 +98,23 @@ export const ShiftDetailScreen = () => {
 
           <Group gap="xl">
             <Group gap={4}>
-              <Text size="xs" opacity={0.8}>Hours · </Text>
-              <Text size="sm" fw={600}>{duration.toFixed(1)}h</Text>
+              <Text size="xs" opacity={0.8}>
+                Hours ·{' '}
+              </Text>
+              <Text size="sm" fw={600}>
+                {duration.toFixed(1)}h
+              </Text>
             </Group>
             <Group gap={4}>
-              <Text size="xs" opacity={0.8}>Wage · </Text>
+              <Text size="xs" opacity={0.8}>
+                Wage ·{' '}
+              </Text>
               <CurrencyDisplay amount={wage} size="sm" fw={600} />
             </Group>
             <Group gap={4}>
-              <Text size="xs" opacity={0.8}>Tips · </Text>
+              <Text size="xs" opacity={0.8}>
+                Tips ·{' '}
+              </Text>
               <CurrencyDisplay amount={form.values.tips || shift.tips} size="sm" fw={600} />
             </Group>
           </Group>
@@ -130,7 +153,7 @@ export const ShiftDetailScreen = () => {
           </form>
         ) : (
           <Stack gap="md" mb="xl">
-             <Button
+            <Button
               variant="light"
               color="teal"
               radius="xl"

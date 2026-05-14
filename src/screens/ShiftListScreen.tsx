@@ -1,4 +1,13 @@
-import { ActionIcon, Box, Button, Container, Group, Text, Title, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Group,
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
 import { IconChevronLeft, IconFilter, IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -16,12 +25,14 @@ export const ShiftListScreen = () => {
 
   // Group shifts by week (mocking the grouping logic slightly for simplicity, based on screenshots)
   // In a real app, we'd use dayjs().week() to group properly
-  
-  const currentMonthShifts = shifts.filter((s) => dayjs(s.date).isSame(dayjs(), 'month')).sort((a,b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
+
+  const currentMonthShifts = shifts
+    .filter((s) => dayjs(s.date).isSame(dayjs(), 'month'))
+    .sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
 
   const totalHours = currentMonthShifts.reduce(
     (sum, s) => sum + calculateDurationHours(s.startTime, s.endTime),
-    0
+    0,
   );
   const totalEarnings = currentMonthShifts.reduce((sum, s) => {
     const hours = calculateDurationHours(s.startTime, s.endTime);
@@ -95,9 +106,7 @@ export const ShiftListScreen = () => {
             }}
           >
             {currentMonthShifts.length > 0 ? (
-              currentMonthShifts.map((shift) => (
-                <ShiftListItem key={shift.id} shift={shift} />
-              ))
+              currentMonthShifts.map((shift) => <ShiftListItem key={shift.id} shift={shift} />)
             ) : (
               <Box py="xl" ta="center">
                 <Text c="dimmed">No shifts this month yet.</Text>
