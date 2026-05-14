@@ -1,5 +1,5 @@
 import { Box, Text, UnstyledButton, useMantineTheme } from '@mantine/core';
-import { IconHome, IconCalendarEvent, IconWallet, IconSettings } from '@tabler/icons-react';
+import { IconCalendarEvent, IconHome, IconSettings, IconWallet } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 

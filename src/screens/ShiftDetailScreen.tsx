@@ -5,10 +5,10 @@ import {
   Container,
   Group,
   NumberInput,
+  Stack,
   Text,
   Title,
   useMantineTheme,
-  Stack,
 } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -18,12 +18,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { useAppStore } from '../store/useAppStore';
-import { calculateDurationHours } from '../utils/date.util';
 import {
+  downloadIcsFile,
   generateGoogleCalendarUrl,
   generateIcsContent,
-  downloadIcsFile,
 } from '../utils/calendar.util';
+import { calculateDurationHours } from '../utils/date.util';
 
 export const ShiftDetailScreen = () => {
   const { id } = useParams();

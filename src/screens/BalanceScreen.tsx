@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Box,
   Button,
   Container,
@@ -8,7 +7,6 @@ import {
   SegmentedControl,
   Stack,
   Text,
-  Title,
   useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -16,8 +14,8 @@ import { IconArrowDown, IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { AddTipForm } from '../components/shared/AddTipForm.component';
+import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { useAppStore } from '../store/useAppStore';
 import { calculateDurationHours } from '../utils/date.util';
 
@@ -45,7 +43,7 @@ export const BalanceScreen = () => {
 
   // Derived data with safety
   const currentMonthShifts = useMemo(
-    () => shifts.filter((s) => s && s.date && dayjs(s.date).isSame(dayjs(), 'month')),
+    () => shifts.filter((s) => s?.date && dayjs(s.date).isSame(dayjs(), 'month')),
     [shifts],
   );
 
@@ -91,7 +89,7 @@ export const BalanceScreen = () => {
 
     // Add shift-related transactions
     shifts.forEach((s) => {
-      if (!s || !s.endTime) return;
+      if (!s?.endTime) return;
 
       const duration = calculateDurationHours(s.startTime, s.endTime);
       const wage = duration * (s.hourlyRate || 0);

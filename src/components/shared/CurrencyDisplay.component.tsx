@@ -1,4 +1,4 @@
-import { Text, TextProps } from '@mantine/core';
+import { Text, type TextProps } from '@mantine/core';
 import { formatCurrency } from '../../utils/currency.util';
 
 interface CurrencyDisplayProps extends TextProps {

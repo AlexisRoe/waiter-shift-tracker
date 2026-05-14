@@ -6,26 +6,26 @@ import {
   Group,
   NumberInput,
   Select,
+  Text,
   TextInput,
   Title,
-  Text,
   useMantineTheme,
 } from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import {
+  IconBriefcase,
+  IconCalendarEvent,
   IconChevronLeft,
   IconClock,
   IconMapPin,
-  IconCalendarEvent,
-  IconBriefcase,
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { useAppStore } from '../store/useAppStore';
 import { calculateDurationHours } from '../utils/date.util';
-import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 
 export const AddShiftScreen = () => {
   const { t } = useTranslation();

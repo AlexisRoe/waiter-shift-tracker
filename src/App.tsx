@@ -1,23 +1,22 @@
 import { AppShell } from '@mantine/core';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { AppLayout } from './components/layout/AppLayout.component';
-import { useAppStore } from './store/useAppStore';
 import { useEffect } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AppLayout } from './components/layout/AppLayout.component';
 import {
+  DEFAULT_LANGUAGE,
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
-  DEFAULT_LANGUAGE,
 } from './constants';
-
+import { AddShiftScreen } from './screens/AddShiftScreen';
+import { BalanceScreen } from './screens/BalanceScreen';
+import { CompanyManagementScreen } from './screens/CompanyManagementScreen';
+import { DashboardScreen } from './screens/DashboardScreen';
 // Screens
 import { OnboardingScreen } from './screens/OnboardingScreen';
-import { DashboardScreen } from './screens/DashboardScreen';
-import { ShiftListScreen } from './screens/ShiftListScreen';
-import { AddShiftScreen } from './screens/AddShiftScreen';
-import { ShiftDetailScreen } from './screens/ShiftDetailScreen';
-import { BalanceScreen } from './screens/BalanceScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
-import { CompanyManagementScreen } from './screens/CompanyManagementScreen';
+import { ShiftDetailScreen } from './screens/ShiftDetailScreen';
+import { ShiftListScreen } from './screens/ShiftListScreen';
+import { useAppStore } from './store/useAppStore';
 
 function App() {
   const isOnboarded = useAppStore((state) => state.isOnboarded);

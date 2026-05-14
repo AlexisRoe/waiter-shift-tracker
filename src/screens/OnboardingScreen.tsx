@@ -1,23 +1,23 @@
 import {
   Box,
   Button,
+  Container,
   NumberInput,
   Select,
   Stack,
+  Text,
   TextInput,
   Title,
-  Text,
-  Container,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '../store/useAppStore';
 import {
+  DEFAULT_LANGUAGE,
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
-  DEFAULT_LANGUAGE,
 } from '../constants';
+import { useAppStore } from '../store/useAppStore';
 
 export const OnboardingScreen = () => {
   const { t, i18n } = useTranslation();

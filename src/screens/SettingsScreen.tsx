@@ -3,35 +3,29 @@ import {
   Box,
   Button,
   Container,
+  Drawer,
   Group,
   NumberInput,
   Select,
+  Stack,
   Text,
   TextInput,
   ThemeIcon,
   Title,
-  useMantineTheme,
-  Drawer,
   UnstyledButton,
-  Stack,
+  useMantineTheme,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconMail,
-  IconUser,
-  IconBriefcase,
-} from '@tabler/icons-react';
+import { IconBriefcase, IconChevronLeft, IconChevronRight, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '../store/useAppStore';
 import {
+  DEFAULT_LANGUAGE,
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
-  DEFAULT_LANGUAGE,
 } from '../constants';
+import { useAppStore } from '../store/useAppStore';
 
 export const SettingsScreen = () => {
   const { t, i18n } = useTranslation();

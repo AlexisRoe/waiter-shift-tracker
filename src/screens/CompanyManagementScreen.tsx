@@ -1,36 +1,35 @@
-import React, { useState } from 'react';
 import {
   ActionIcon,
+  Badge,
   Box,
   Button,
+  Card,
   Container,
-  Group,
   Drawer,
+  Group,
   NumberInput,
+  Paper,
   Stack,
   Text,
   TextInput,
   Title,
-  Card,
-  Badge,
-  Paper,
-  Divider,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import {
+  IconBriefcase,
   IconChevronLeft,
-  IconPlus,
-  IconTrash,
   IconEdit,
+  IconPlus,
   IconStar,
   IconStarFilled,
-  IconBriefcase,
+  IconTrash,
 } from '@tabler/icons-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import type { Company } from '../store/types';
 import { useAppStore } from '../store/useAppStore';
-import { Company } from '../store/types';
 
 export const CompanyManagementScreen = () => {
   const { t } = useTranslation();
