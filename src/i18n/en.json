@@ -71,7 +71,13 @@
     "addTip": "Deposit",
     "all": "All",
     "shifts": "Shifts",
-    "tipsAndPot": "Tips & pot"
+    "tipsAndPot": "Tips",
+    "noTransactions": "No transactions yet",
+    "shiftWage": "Shift Wage",
+    "shiftTip": "Shift Tip",
+    "manualTip": "Manual Tip",
+    "withdrawal": "Withdrawal",
+    "emptyState": "Start by completing a shift or adding a tip!"
   },
   "addTip": {
     "titleDeposit": "Add tip entry",

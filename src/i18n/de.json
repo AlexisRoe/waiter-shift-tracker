@@ -71,7 +71,13 @@
     "addTip": "Einzahlen",
     "all": "Alle",
     "shifts": "Schichten",
-    "tipsAndPot": "Trinkgeld & Kasse"
+    "tipsAndPot": "Trinkgeld",
+    "noTransactions": "Noch keine Transaktionen vorhanden",
+    "shiftWage": "Schichtlohn",
+    "shiftTip": "Schicht-Trinkgeld",
+    "manualTip": "Manuelle Einzahlung",
+    "withdrawal": "Auszahlung",
+    "emptyState": "Vervollständige eine Schicht oder füge Trinkgeld hinzu!"
   },
   "addTip": {
     "titleDeposit": "Trinkgeld einzahlen",
