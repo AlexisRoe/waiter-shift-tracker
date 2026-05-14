@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { EarningsTrendChart } from '../components/charts/EarningsTrendChart.component';
 import { WeekdayBarChart } from '../components/charts/WeekdayBarChart.component';
+import { MonthlyEarningsChart } from '../components/charts/MonthlyEarningsChart.component';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { useAppStore } from '../store/useAppStore';
 import { calculateDurationHours } from '../utils/date.util';
@@ -29,6 +30,10 @@ export const DashboardScreen = () => {
     const hours = calculateDurationHours(s.startTime, s.endTime);
     return sum + hours * s.hourlyRate + (s.tips || 0);
   }, 0);
+  const monthlyWage = currentMonthShifts.reduce((sum, s) => {
+    return sum + calculateDurationHours(s.startTime, s.endTime) * s.hourlyRate;
+  }, 0);
+  const monthlyTips = currentMonthShifts.reduce((sum, s) => sum + (s.tips || 0), 0);
   const avgHourly = totalHours > 0 ? totalEarnings / totalHours : 0;
 
   // Mock data for charts to match screenshots visually
@@ -45,6 +50,15 @@ export const DashboardScreen = () => {
     { day: 'F', hours: 8 },
     { day: 'S', hours: 10 }, // Sat is best
     { day: 'S', hours: 7 },
+  ];
+
+  const monthlyChartData = [
+    { month: 'Nov', wage: 270, tips: 100 },
+    { month: 'Dec', wage: 330, tips: 139 },
+    { month: 'Jan', wage: 400, tips: 130 },
+    { month: 'Feb', wage: 320, tips: 78 },
+    { month: 'Mar', wage: 200, tips: 46 },
+    { month: dayjs().format('MMM'), wage: monthlyWage, tips: monthlyTips },
   ];
 
   return (
@@ -177,6 +191,24 @@ export const DashboardScreen = () => {
             </Box>
           </Group>
           <WeekdayBarChart data={weekdayData} />
+        </Box>
+
+        <Box
+          style={{
+            backgroundColor: 'white',
+            borderRadius: theme.radius.lg,
+            padding: 20,
+            boxShadow: theme.shadows.sm,
+            marginBottom: 32,
+          }}
+        >
+          <Group justify="space-between" mb="lg">
+            <Text fw={700}>{t('balance.monthlyEarnings')}</Text>
+            <Text size="xs" c="dimmed">
+              {dayjs().format('MMMM YYYY')}
+            </Text>
+          </Group>
+          <MonthlyEarningsChart data={monthlyChartData} />
         </Box>
       </Container>
 

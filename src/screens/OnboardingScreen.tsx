@@ -82,6 +82,11 @@ export const OnboardingScreen = () => {
               placeholder={t('onboarding.hourlyRatePlaceholder')}
               min={0}
               decimalScale={2}
+              fixedDecimalScale
+              thousandSeparator="."
+              decimalSeparator=","
+              leftSection="€"
+              rightSection={<Text size="xs" c="dimmed">/h</Text>}
               {...form.getInputProps('hourlyRate')}
             />
 
@@ -90,6 +95,10 @@ export const OnboardingScreen = () => {
               placeholder={t('onboarding.startingTipBudgetPlaceholder')}
               min={0}
               decimalScale={2}
+              fixedDecimalScale
+              thousandSeparator="."
+              decimalSeparator=","
+              leftSection="€"
               {...form.getInputProps('startingTipBudget')}
             />
 

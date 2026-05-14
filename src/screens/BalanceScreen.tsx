@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { useAppStore } from '../store/useAppStore';
 import { calculateDurationHours } from '../utils/date.util';
-import { BarChart } from '@mantine/charts';
 
 export const BalanceScreen = () => {
   const { t } = useTranslation();
@@ -35,16 +34,6 @@ export const BalanceScreen = () => {
   const currentPot = initialPot + tipsFromShifts + externalTipsSum;
   const totalIn = initialPot + tipsFromShifts + tipTransactions.filter(t => t.amount > 0).reduce((s,t) => s+t.amount, 0);
   const totalOut = tipTransactions.filter(t => t.amount < 0).reduce((s,t) => s+t.amount, 0);
-
-  // Mock chart data
-  const chartData = [
-    { month: 'Nov', wage: 270, tips: 100 },
-    { month: 'Dec', wage: 330, tips: 139 },
-    { month: 'Jan', wage: 400, tips: 130 },
-    { month: 'Feb', wage: 320, tips: 78 },
-    { month: 'Mar', wage: 200, tips: 46 },
-    { month: 'Apr', wage: monthlyWage, tips: monthlyTips },
-  ];
 
   return (
     <Box pb={100}>
@@ -74,22 +63,9 @@ export const BalanceScreen = () => {
             {t('balance.monthlyEarnings')}
           </Text>
           <CurrencyDisplay amount={monthlyTotal} fz={32} fw={800} lh={1.1} />
-          <Text size="sm" c="dimmed" mb="xl">
+          <Text size="sm" c="dimmed">
             {dayjs().format('MMM YYYY')} · {t('balance.target')} 540€
           </Text>
-
-          <BarChart
-            h={180}
-            data={chartData}
-            dataKey="month"
-            type="stacked"
-            series={[
-              { name: 'wage', color: theme.colors.teal[8], label: t('balance.wage') },
-              { name: 'tips', color: theme.colors.yellow[5], label: t('balance.tips') },
-            ]}
-            barProps={{ radius: [4, 4, 0, 0] }}
-            withYAxis={false}
-          />
         </Box>
 
         <Box
