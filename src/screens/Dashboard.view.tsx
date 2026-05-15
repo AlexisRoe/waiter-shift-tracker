@@ -86,7 +86,7 @@ export const DashboardView = () => {
         />
       </TealPageHeader>
 
-      <Container size="sm" p="md" mt={-10}>
+      <Container size="sm" p="md">
         {/* EARNINGS section */}
         <Box
           style={{
@@ -94,7 +94,6 @@ export const DashboardView = () => {
             borderRadius: 16,
             padding: 20,
             marginBottom: 12,
-            marginTop: 24,
           }}
         >
           <Text size="xs" fw={700} c="teal.6" mb={12} tt="uppercase">
