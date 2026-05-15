@@ -81,7 +81,7 @@ export const OnboardingView = () => {
             <Title order={1} mb={8} c="white">
               {t('onboarding.title')}
             </Title>
-            <Text c="white" mb="xl" maw='10rem'>
+            <Text c="white" mb="xl" maw="10rem">
               {t('onboarding.subtitle')}
             </Text>
           </Stack>

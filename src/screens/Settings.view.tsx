@@ -145,53 +145,47 @@ export const SettingsView = () => {
 
   return (
     <Box>
-
       <TealPageHeader>
-
-
-
-          <Group wrap="nowrap">
-            <ThemeIcon size={64} radius="xl" color="teal.0">
-              <Text fw={700} size="xl" c='teal.9'>
-                {profile?.name.substring(0, 2).toUpperCase()}
-              </Text>
-            </ThemeIcon>
-            <Box>
-              <Title order={3} mb={8} c="white">
-                {profile?.name}
-              </Title>
-              <Group gap="xs">
-                <Box
-                  style={{
-                    backgroundColor: 'white',
-                    color: theme.colors.teal[8],
-                    padding: '2px 8px',
-                    borderRadius: 12,
-                    fontSize: 12,
-                    fontWeight: 600,
-                  }}
-                >
-                  {defaultCompany?.name || t('settings.noCompany')}
-                </Box>
-                <Box
-                  style={{
-                    backgroundColor: 'white',
-                    color: theme.colors.teal[8],
-                    padding: '2px 8px',
-                    borderRadius: 12,
-                    fontSize: 12,
-                    fontWeight: 600,
-                  }}
-                >
-                  {t('settings.since', { date: 'Mar 2026' })}
-                </Box>
-              </Group>
-            </Box>
-          </Group>
-              </TealPageHeader>
+        <Group wrap="nowrap">
+          <ThemeIcon size={64} radius="xl" color="teal.0">
+            <Text fw={700} size="xl" c="teal.9">
+              {profile?.name.substring(0, 2).toUpperCase()}
+            </Text>
+          </ThemeIcon>
+          <Box>
+            <Title order={3} mb={8} c="white">
+              {profile?.name}
+            </Title>
+            <Group gap="xs">
+              <Box
+                style={{
+                  backgroundColor: 'white',
+                  color: theme.colors.teal[8],
+                  padding: '2px 8px',
+                  borderRadius: 12,
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
+                {defaultCompany?.name || t('settings.noCompany')}
+              </Box>
+              <Box
+                style={{
+                  backgroundColor: 'white',
+                  color: theme.colors.teal[8],
+                  padding: '2px 8px',
+                  borderRadius: 12,
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
+                {t('settings.since', { date: 'Mar 2026' })}
+              </Box>
+            </Group>
+          </Box>
+        </Group>
+      </TealPageHeader>
       <Container size="sm" p="md">
-
-
         <form onSubmit={form.onSubmit(handleSave)}>
           <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
             {t('settings.account')}
