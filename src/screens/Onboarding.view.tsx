@@ -73,15 +73,15 @@ export const OnboardingView = () => {
   return (
     <Box>
       <TealPageHeader>
-        <Group justify="center" align="center">
+        <Group justify="center" align="flex-start">
           <Stack pb="xl">
-            <IconHandClick size={72} />
+            <IconHandClick size={64} />
           </Stack>
           <Stack gap={0}>
             <Title order={1} mb={8} c="white">
               {t('onboarding.title')}
             </Title>
-            <Text c="white" mb="xl">
+            <Text c="white" mb="xl" maw="10rem">
               {t('onboarding.subtitle')}
             </Text>
           </Stack>

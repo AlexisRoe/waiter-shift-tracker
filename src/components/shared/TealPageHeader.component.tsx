@@ -14,9 +14,8 @@ export const TealPageHeader = ({ children, color }: PropsWithChildren<Props>) =>
         backgroundColor: color ?? theme.colors.teal[8],
         borderBottomLeftRadius: 32,
         borderBottomRightRadius: 32,
-        padding: '40px 24px 32px',
+        padding: '72px 32px 24px 32px',
         color: 'white',
-        pb: '30px',
       }}
     >
       {children}

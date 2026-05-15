@@ -1,7 +1,10 @@
 {
   "name": "waiter-shift-tracker",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "start:dev": "vite",

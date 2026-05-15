@@ -11,6 +11,7 @@ import {
   Text,
   TextInput,
   ThemeIcon,
+  Title,
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
@@ -39,6 +40,7 @@ import {
   persistVerifiedBackupJson,
   verifyBackupJsonForImport,
 } from '../store/appDataBackup';
+import { TealPageHeader } from '../components/shared/TealPageHeader.component';
 
 export const SettingsView = () => {
   const { t, i18n } = useTranslation();
@@ -142,57 +144,48 @@ export const SettingsView = () => {
   };
 
   return (
-    <Box pb={100}>
-      <Container size="sm" p="md" mt="30px">
-        <Box
-          style={{
-            backgroundColor: 'white',
-            borderRadius: theme.radius.lg,
-            padding: 24,
-            border: `1px solid ${theme.colors.gray[2]}`,
-            marginBottom: 24,
-          }}
-        >
-          <Group wrap="nowrap">
-            <ThemeIcon size={64} radius="xl" color="teal.9">
-              <Text fw={700} size="xl">
-                {profile?.name.substring(0, 2).toUpperCase()}
-              </Text>
-            </ThemeIcon>
-            <Box>
-              <Text fw={700} size="lg">
-                {profile?.name}
-              </Text>
-              <Group gap="xs">
-                <Box
-                  style={{
-                    backgroundColor: theme.colors.teal[0],
-                    color: theme.colors.teal[8],
-                    padding: '2px 8px',
-                    borderRadius: 12,
-                    fontSize: 12,
-                    fontWeight: 600,
-                  }}
-                >
-                  {defaultCompany?.name || t('settings.noCompany')}
-                </Box>
-                <Box
-                  style={{
-                    backgroundColor: theme.colors.gray[1],
-                    color: theme.colors.gray[7],
-                    padding: '2px 8px',
-                    borderRadius: 12,
-                    fontSize: 12,
-                    fontWeight: 600,
-                  }}
-                >
-                  {t('settings.since', { date: 'Mar 2026' })}
-                </Box>
-              </Group>
-            </Box>
-          </Group>
-        </Box>
-
+    <Box>
+      <TealPageHeader>
+        <Group wrap="nowrap">
+          <ThemeIcon size={64} radius="xl" color="teal.0">
+            <Text fw={700} size="xl" c="teal.9">
+              {profile?.name.substring(0, 2).toUpperCase()}
+            </Text>
+          </ThemeIcon>
+          <Box>
+            <Title order={3} mb={8} c="white">
+              {profile?.name}
+            </Title>
+            <Group gap="xs">
+              <Box
+                style={{
+                  backgroundColor: 'white',
+                  color: theme.colors.teal[8],
+                  padding: '2px 8px',
+                  borderRadius: 12,
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
+                {defaultCompany?.name || t('settings.noCompany')}
+              </Box>
+              <Box
+                style={{
+                  backgroundColor: 'white',
+                  color: theme.colors.teal[8],
+                  padding: '2px 8px',
+                  borderRadius: 12,
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
+                {t('settings.since', { date: 'Mar 2026' })}
+              </Box>
+            </Group>
+          </Box>
+        </Group>
+      </TealPageHeader>
+      <Container size="sm" p="md">
         <form onSubmit={form.onSubmit(handleSave)}>
           <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
             {t('settings.account')}
