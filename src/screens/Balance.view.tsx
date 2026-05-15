@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Box,
   Button,
   Container,
@@ -9,7 +10,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconArrowDown, IconPlus } from '@tabler/icons-react';
+import { IconArrowDown, IconPlus, IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { AddTipForm } from '../components/shared/AddTipForm.component';
@@ -25,8 +26,18 @@ export const BalanceView = () => {
   const [addOpened, { open: openAdd, close: closeAdd }] = useDisclosure(false);
   const [withdrawOpened, { open: openWithdraw, close: closeWithdraw }] = useDisclosure(false);
 
-  const { tab, setTab, profile, currentPot, totalIn, totalOut, monthlyTotal, grouped } =
-    useBalance();
+  const {
+    tab,
+    setTab,
+    profile,
+    currentPot,
+    totalIn,
+    totalOut,
+    monthlyTotal,
+    grouped,
+    deleteTipTransaction,
+    isManualTransaction,
+  } = useBalance();
 
   return (
     <Box pb={100}>
@@ -197,10 +208,23 @@ export const BalanceView = () => {
                         )}
                       </Group>
                     </Box>
-                    <Text fw={700} c={tx.amount < 0 ? 'red.7' : 'teal.8'}>
-                      {tx.amount < 0 ? '-' : '+'}
-                      {Math.abs(tx.amount).toFixed(2)} €
-                    </Text>
+                    <Group gap="xs">
+                      <Text fw={700} c={tx.amount < 0 ? 'red.7' : 'teal.8'}>
+                        {tx.amount < 0 ? '-' : '+'}
+                        {Math.abs(tx.amount).toFixed(2)} €
+                      </Text>
+                      <ActionIcon
+                        variant="subtle"
+                        color="red"
+                        disabled={isManualTransaction(tx) === false}
+                        onClick={() => {
+                          deleteTipTransaction(tx);
+                        }}
+                        radius="md"
+                      >
+                        <IconTrash size={18} />
+                      </ActionIcon>
+                    </Group>
                   </Group>
                 ))}
               </Stack>

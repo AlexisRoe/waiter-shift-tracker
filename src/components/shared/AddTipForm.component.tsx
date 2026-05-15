@@ -22,6 +22,7 @@ export const AddTipForm = ({ mode, onSuccess, onCancel }: AddTipFormProps) => {
       amount: '' as unknown as number,
       date: new Date(),
       note: '',
+      manual: true,
     },
     validate: {
       amount: (val: number) => (val > 0 ? null : t('common.invalidNumber')),

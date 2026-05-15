@@ -27,6 +27,8 @@ export const useBalance = () => {
   const tab = useAppStore((state) => state.balanceTab);
   const setTab = useAppStore((state) => state.setBalanceTab);
 
+  const deleteTipTransaction = useAppStore((state) => state.deleteTipTransaction);
+
   // --- Monthly earnings ---
   const currentMonthShifts = useMemo(
     () => shifts.filter((s) => s?.date && dayjs(s.date).isSame(dayjs(), 'month')),
@@ -134,6 +136,17 @@ export const useBalance = () => {
     [filteredTransactions],
   );
 
+  // --- Delete single tip transaction
+  const isManualTransaction = (tx: UnifiedTransaction): boolean => {
+    return tx.type === 'manualTip' || tx.type === 'withdrawal';
+  }
+
+  const deleteTransaction = (tx: UnifiedTransaction): void => {
+    if (isManualTransaction(tx) === true) {
+      deleteTipTransaction(tx);
+    }
+  };
+
   return {
     tab,
     setTab,
@@ -147,5 +160,7 @@ export const useBalance = () => {
     allTransactions,
     filteredTransactions,
     grouped,
+    deleteTipTransaction: deleteTransaction,
+    isManualTransaction,
   };
 };

@@ -58,5 +58,6 @@ export interface AppState {
   updateShift: (id: string, updates: Partial<Shift>) => void;
   deleteShift: (id: string) => void;
   addTipTransaction: (transaction: TipTransaction) => void;
+  deleteTipTransaction: (transaction: TipTransaction) => void;
   clearAllData: () => void;
 }

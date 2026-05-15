@@ -83,6 +83,11 @@ export const useAppStore = create<AppState>()(
           tipTransactions: [...state.tipTransactions, transaction],
         })),
 
+      deleteTipTransaction: (transaction: TipTransaction) =>
+        set((state) => ({
+          tipTransactions: state.tipTransactions.filter((tt) => tt.id !== transaction.id),
+        })),
+
       clearAllData: () => {
         try {
           localStorage.removeItem(PERSIST_STORAGE_NAME);
