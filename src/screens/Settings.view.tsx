@@ -163,9 +163,6 @@ export const SettingsView = () => {
               <Text fw={700} size="lg">
                 {profile?.name}
               </Text>
-              <Text size="sm" c="dimmed" mb="xs">
-                {profile?.name.toLowerCase().replace(' ', '.')}@email.com
-              </Text>
               <Group gap="xs">
                 <Box
                   style={{
