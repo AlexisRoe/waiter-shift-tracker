@@ -143,7 +143,7 @@ export const SettingsView = () => {
 
   return (
     <Box pb={100}>
-      <Container size="sm" p="md">
+      <Container size="sm" p="md" mt="30px">
         <Box
           style={{
             backgroundColor: 'white',
