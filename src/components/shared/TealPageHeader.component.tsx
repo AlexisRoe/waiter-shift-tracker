@@ -16,7 +16,7 @@ export const TealPageHeader = ({ children, color }: PropsWithChildren<Props>) =>
         borderBottomRightRadius: 32,
         padding: '40px 24px 32px',
         color: 'white',
-        pb: '30px'
+        pb: '30px',
       }}
     >
       {children}

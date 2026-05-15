@@ -401,15 +401,14 @@ export const SettingsView = () => {
                     </Stack>
                   </Box>
                   <Divider color={theme.colors.gray[2]} />
-                  <Stack gap='md' mt='md'>
+                  <Stack gap="md" mt="md">
                     <Button color="red" variant="light" fullWidth onClick={open} type="button">
                       {t('settings.clearAllData')}
                     </Button>
-                              <Group align='center' justify='center'>
-             <Text c='dimmed'>version {__APP_VERSION__}</Text>
-          </Group>
+                    <Group align="center" justify="center">
+                      <Text c="dimmed">version {__APP_VERSION__}</Text>
+                    </Group>
                   </Stack>
-
                 </Stack>
               </Box>
             </Collapse>
