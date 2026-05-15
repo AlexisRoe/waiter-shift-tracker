@@ -1,13 +1,17 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import packageJson from './package.json';
+import { execSync } from 'child_process';
+
+// Get the latest short commit hash from Git
+const commitHash = execSync('git rev-parse --short HEAD').toString().trim();
 
 // https://vite.dev/config/
 export default defineConfig({
   define: {
-    // Inject the version from package.json
-    __APP_VERSION__: JSON.stringify(packageJson.version),
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(process.env.npm_package_version),
+    'import.meta.env.VITE_BUILD_TIME': JSON.stringify(new Date().toISOString()),
+    'import.meta.env.VITE_COMMIT_HASH': JSON.stringify(commitHash),
   },
   plugins: [
     react(),

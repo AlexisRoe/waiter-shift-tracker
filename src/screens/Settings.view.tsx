@@ -400,15 +400,28 @@ export const SettingsView = () => {
                       ) : null}
                     </Stack>
                   </Box>
-                  <Divider color={theme.colors.gray[2]} />
-                  <Stack gap="md" mt="md">
+                  <Box
+                    style={{
+                      backgroundColor: 'white',
+                      borderRadius: theme.radius.lg,
+                      padding: 24,
+                      border: `1px solid ${theme.colors.gray[2]}`,
+                    }}
+                  >
+                    <Stack gap={0}>
+                      <Text c="dimmed" fz="sm">
+                        Build: v{import.meta.env.VITE_APP_VERSION} (
+                        {import.meta.env.VITE_COMMIT_HASH})
+                      </Text>
+                      <Text c="dimmed" fz="sm">
+                        Date: {import.meta.env.VITE_BUILD_TIME}
+                      </Text>
+                    </Stack>
+                    <Space h="md" />
                     <Button color="red" variant="light" fullWidth onClick={open} type="button">
                       {t('settings.clearAllData')}
                     </Button>
-                    <Group align="center" justify="center">
-                      <Text c="dimmed">version {__APP_VERSION__}</Text>
-                    </Group>
-                  </Stack>
+                  </Box>
                 </Stack>
               </Box>
             </Collapse>
