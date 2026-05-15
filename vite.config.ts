@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'node:child_process';
-
 import { cloudflare } from "@cloudflare/vite-plugin";
 
 // Get the latest short commit hash from Git
