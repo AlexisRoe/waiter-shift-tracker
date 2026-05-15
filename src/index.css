@@ -54,7 +54,9 @@ body {
 
 /* Target mobile devices and force inputs to be at least 16px */
 @media screen and (max-width: 768px) {
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     font-size: 16px !important;
   }
 }
