@@ -139,7 +139,7 @@ export const useBalance = () => {
   // --- Delete single tip transaction
   const isManualTransaction = (tx: UnifiedTransaction): boolean => {
     return tx.type === 'manualTip' || tx.type === 'withdrawal';
-  }
+  };
 
   const deleteTransaction = (tx: UnifiedTransaction): void => {
     if (isManualTransaction(tx) === true) {
