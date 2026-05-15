@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Group,
   NumberInput,
   Select,
   Stack,
@@ -18,6 +19,8 @@ import {
   DEFAULT_MIN_HOURLY_WAGE,
 } from '../constants';
 import { useAppStore } from '../store/app.store';
+import { TealPageHeader } from '../components/shared/TealPageHeader.component';
+import { IconHandClick } from '@tabler/icons-react';
 
 export const OnboardingView = () => {
   const { t, i18n } = useTranslation();
@@ -68,80 +71,90 @@ export const OnboardingView = () => {
   };
 
   return (
-    <Container size="sm" p="xl">
-      <Box mt="xl">
-        <Title order={1} mb={8} c="teal.9">
-          {t('onboarding.title')}
-        </Title>
-        <Text c="dimmed" mb="xl">
-          {t('onboarding.subtitle')}
-        </Text>
-
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Stack gap="md">
-            <TextInput
-              withAsterisk
-              label={t('onboarding.name')}
-              placeholder={t('onboarding.namePlaceholder')}
-              {...form.getInputProps('name')}
-            />
-
-            <TextInput
-              withAsterisk
-              label={t('onboarding.company')}
-              placeholder={t('onboarding.companyPlaceholder')}
-              {...form.getInputProps('company')}
-            />
-
-            <NumberInput
-              withAsterisk
-              label={t('onboarding.hourlyRate')}
-              placeholder={t('onboarding.hourlyRatePlaceholder')}
-              min={0}
-              decimalScale={2}
-              fixedDecimalScale
-              thousandSeparator="."
-              decimalSeparator=","
-              leftSection="€"
-              rightSection={
-                <Text size="xs" c="dimmed">
-                  /h
-                </Text>
-              }
-              {...form.getInputProps('hourlyRate')}
-            />
-
-            <NumberInput
-              label={t('onboarding.startingTipBudget')}
-              placeholder={t('onboarding.startingTipBudgetPlaceholder')}
-              min={0}
-              decimalScale={2}
-              fixedDecimalScale
-              thousandSeparator="."
-              decimalSeparator=","
-              leftSection="€"
-              {...form.getInputProps('startingTipBudget')}
-            />
-
-            <Select
-              label={t('onboarding.language')}
-              data={[
-                { value: 'de', label: 'Deutsch' },
-                { value: 'en', label: 'English' },
-              ]}
-              {...form.getInputProps('language')}
-              onChange={(val) => {
-                form.setFieldValue('language', val || DEFAULT_LANGUAGE);
-                i18n.changeLanguage(val || DEFAULT_LANGUAGE);
-              }}
-            />
-
-            <Button type="submit" size="lg" mt="xl" color="teal">
-              {t('onboarding.start')}
-            </Button>
+    <Box>
+      <TealPageHeader>
+        <Group justify="center" align="center">
+          <Stack pb="xl">
+            <IconHandClick size={72} />
           </Stack>
-        </form>
-      </Box>
-    </Container>
+          <Stack gap={0}>
+            <Title order={1} mb={8} c="white">
+              {t('onboarding.title')}
+            </Title>
+            <Text c="white" mb="xl">
+              {t('onboarding.subtitle')}
+            </Text>
+          </Stack>
+        </Group>
+      </TealPageHeader>
+      <Container size="sm" p="xl">
+        <Box mt="xl">
+          <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Stack gap="md">
+              <TextInput
+                withAsterisk
+                label={t('onboarding.name')}
+                placeholder={t('onboarding.namePlaceholder')}
+                {...form.getInputProps('name')}
+              />
+
+              <TextInput
+                withAsterisk
+                label={t('onboarding.company')}
+                placeholder={t('onboarding.companyPlaceholder')}
+                {...form.getInputProps('company')}
+              />
+
+              <NumberInput
+                withAsterisk
+                label={t('onboarding.hourlyRate')}
+                placeholder={t('onboarding.hourlyRatePlaceholder')}
+                min={0}
+                decimalScale={2}
+                fixedDecimalScale
+                thousandSeparator="."
+                decimalSeparator=","
+                leftSection="€"
+                rightSection={
+                  <Text size="xs" c="dimmed">
+                    /h
+                  </Text>
+                }
+                {...form.getInputProps('hourlyRate')}
+              />
+
+              <NumberInput
+                label={t('onboarding.startingTipBudget')}
+                placeholder={t('onboarding.startingTipBudgetPlaceholder')}
+                min={0}
+                decimalScale={2}
+                fixedDecimalScale
+                thousandSeparator="."
+                decimalSeparator=","
+                leftSection="€"
+                {...form.getInputProps('startingTipBudget')}
+              />
+
+              <Select
+                label={t('onboarding.language')}
+                data={[
+                  { value: 'de', label: 'Deutsch' },
+                  { value: 'en', label: 'English' },
+                ]}
+                {...form.getInputProps('language')}
+                onChange={(val) => {
+                  form.setFieldValue('language', val || DEFAULT_LANGUAGE);
+                  i18n.changeLanguage(val || DEFAULT_LANGUAGE);
+                }}
+              />
+
+              <Button type="submit" size="lg" mt="xl" color="teal">
+                {t('onboarding.start')}
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+      </Container>
+    </Box>
   );
 };
