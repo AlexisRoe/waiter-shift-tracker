@@ -26,7 +26,7 @@ export const AppLayout = () => {
         margin: '0 auto',
         minHeight: '100vh',
         position: 'relative',
-        backgroundColor: '#f8f9fa',
+        backgroundColor: '#ffffff',
         boxShadow: '0 0 20px rgba(0,0,0,0.05)',
         display: 'flex',
         flexDirection: 'column',

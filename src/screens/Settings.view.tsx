@@ -4,9 +4,7 @@ import {
   Collapse,
   Container,
   Divider,
-  Drawer,
   Group,
-  Modal,
   NumberInput,
   Select,
   Stack,
@@ -29,19 +27,20 @@ import {
 import { type ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { BottomDrawer } from '../components/shared/BottomDrawer.component';
 import {
   DEFAULT_LANGUAGE,
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
 } from '../constants';
+import { useAppStore } from '../store/app.store';
 import {
   buildExportJsonString,
   persistVerifiedBackupJson,
   verifyBackupJsonForImport,
 } from '../store/appDataBackup';
-import { useAppStore } from '../store/useAppStore';
 
-export const SettingsScreen = () => {
+export const SettingsView = () => {
   const { t, i18n } = useTranslation();
   const theme = useMantineTheme();
   const navigate = useNavigate();
@@ -301,9 +300,6 @@ export const SettingsScreen = () => {
             />
           </Box>
 
-          <Text size="xs" fw={700} c="dimmed" mb="xs" ml="sm">
-            {t('settings.advanced')}
-          </Text>
           <Box
             style={{
               backgroundColor: 'white',
@@ -422,16 +418,12 @@ export const SettingsScreen = () => {
           </Button>
         </form>
 
-        <Modal
+        <BottomDrawer
           opened={importConfirmOpened}
           onClose={cancelImportConfirm}
           title={<Text fw={700}>{t('settings.importOverwriteTitle')}</Text>}
-          centered
-          radius="lg"
-          size="sm"
-          padding="lg"
         >
-          <Stack gap="lg">
+          <Stack gap="xl" pb="xl">
             <Text size="sm" c="dimmed">
               {t('settings.importOverwriteMessage')}
             </Text>
@@ -444,9 +436,9 @@ export const SettingsScreen = () => {
               </Button>
             </Group>
           </Stack>
-        </Modal>
+        </BottomDrawer>
 
-        <Drawer
+        <BottomDrawer
           opened={opened}
           onClose={close}
           title={
@@ -454,17 +446,6 @@ export const SettingsScreen = () => {
               {t('settings.clearAllData')}
             </Text>
           }
-          position="bottom"
-          size="auto"
-          withinPortal={false}
-          padding="xl"
-          styles={{
-            content: {
-              borderTopLeftRadius: 32,
-              borderTopRightRadius: 32,
-              boxShadow: '0 -10px 30px rgba(0,0,0,0.1)',
-            },
-          }}
         >
           <Stack gap="xl" pb="xl">
             <Text size="sm" c="dimmed">
@@ -480,7 +461,7 @@ export const SettingsScreen = () => {
               </Button>
             </Group>
           </Stack>
-        </Drawer>
+        </BottomDrawer>
       </Container>
     </Box>
   );

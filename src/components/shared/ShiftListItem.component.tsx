@@ -1,7 +1,6 @@
 import { Box, Group, Text, UnstyledButton, useMantineTheme } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
 import type { Shift } from '../../store/types';
 import { calculateDurationHours } from '../../utils/date.util';
 import { CurrencyDisplay } from './CurrencyDisplay.component';

@@ -16,9 +16,9 @@ import { IconCalendarEvent, IconChevronLeft } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAppStore } from '../store/useAppStore';
+import { useAppStore } from '../store/app.store';
 
-export const AddTipScreen = () => {
+export const AddTipView = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
   const navigate = useNavigate();

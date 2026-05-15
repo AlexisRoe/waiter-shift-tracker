@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useAppStore } from '../store/app.store';
 import type { Shift } from '../store/types';
-import { useAppStore } from '../store/useAppStore';
 import { useShiftStats } from './useShiftStats.hook';
 
 function resetStore() {

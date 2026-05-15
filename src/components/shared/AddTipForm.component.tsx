@@ -4,7 +4,7 @@ import { useForm } from '@mantine/form';
 import { IconCalendarEvent } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../store/app.store';
 
 interface AddTipFormProps {
   mode: 'deposit' | 'withdraw';

@@ -1,8 +1,16 @@
 import { del, get, set } from 'idb-keyval';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { AppState, Company, Shift, TipTransaction, UserProfile } from './types';
 import { PERSIST_STORAGE_NAME } from './persistKey';
+import type {
+  AppState,
+  BalanceTab,
+  Company,
+  DashboardPeriod,
+  Shift,
+  TipTransaction,
+  UserProfile,
+} from './types';
 
 const indexedDBStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -25,9 +33,13 @@ export const useAppStore = create<AppState>()(
       shifts: [],
       tipTransactions: [],
       isOnboarded: false,
+      dashboardPeriod: 'month',
+      balanceTab: 'All',
       _hasHydrated: false,
 
       setHasHydrated: (value: boolean) => set({ _hasHydrated: value }),
+      setDashboardPeriod: (period: DashboardPeriod) => set({ dashboardPeriod: period }),
+      setBalanceTab: (tab: BalanceTab) => set({ balanceTab: tab }),
 
       setProfile: (profile: UserProfile) => set(() => ({ profile, isOnboarded: true })),
 

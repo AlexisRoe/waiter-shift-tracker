@@ -2,8 +2,8 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useAppStore } from '../../store/app.store';
 import type { Company, Shift, UserProfile } from '../../store/types';
-import { useAppStore } from '../../store/useAppStore';
 import { renderWithProviders } from '../../test/renderWithProviders';
 import { ShiftForm } from './ShiftForm.component';
 
@@ -56,7 +56,7 @@ describe('ShiftForm', () => {
   it('submits a new shift and closes the sheet', async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-    vi.spyOn(crypto, 'randomUUID').mockReturnValue('fixed-id');
+    vi.spyOn(crypto, 'randomUUID').mockReturnValue('00000000-0000-0000-0000-000000000001');
 
     renderWithProviders(createElement(ShiftForm, { onClose }));
 

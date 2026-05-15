@@ -3,8 +3,8 @@ import { createElement, type ReactNode } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import i18n from '../i18n';
+import { useAppStore } from '../store/app.store';
 import type { Company, Shift, UserProfile } from '../store/types';
-import { useAppStore } from '../store/useAppStore';
 import { useBalance } from './useBalance.hook';
 
 const profile: UserProfile = {

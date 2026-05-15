@@ -32,15 +32,22 @@ export interface TipTransaction {
   note?: string;
 }
 
+export type DashboardPeriod = 'month' | 'three-months' | 'year';
+export type BalanceTab = 'All' | 'Shifts' | 'Tips';
+
 export interface AppState {
   profile: UserProfile | null;
   companies: Company[];
   shifts: Shift[];
   tipTransactions: TipTransaction[];
   isOnboarded: boolean;
+  dashboardPeriod: DashboardPeriod;
+  balanceTab: BalanceTab;
   /** True after `persist` finishes rehydrating from IndexedDB (not persisted). */
   _hasHydrated: boolean;
   setHasHydrated: (value: boolean) => void;
+  setDashboardPeriod: (period: DashboardPeriod) => void;
+  setBalanceTab: (tab: BalanceTab) => void;
   setProfile: (profile: UserProfile) => void;
   updateProfile: (updates: Partial<UserProfile>) => void;
   addCompany: (company: Company) => void;

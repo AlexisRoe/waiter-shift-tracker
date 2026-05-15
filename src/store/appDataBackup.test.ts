@@ -34,6 +34,10 @@ describe('appDataBackup', () => {
     deleteShift: () => {},
     addTipTransaction: () => {},
     clearAllData: () => {},
+    dashboardPeriod: 'month',
+    balanceTab: 'All',
+    setDashboardPeriod: () => {},
+    setBalanceTab: () => {},
   };
 
   it('export then import round-trips to IndexedDB without hash in stored value', async () => {

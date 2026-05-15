@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateDurationHours, formatDate } from './date.util';
+import { calculateDurationHours, formatDate, groupByMonth } from './date.util';
 
 describe('formatDate', () => {
   it('formats an ISO date with the default pattern', () => {
@@ -23,5 +23,34 @@ describe('calculateDurationHours', () => {
 
   it('adds a day when the end time is before the start time (overnight shift)', () => {
     expect(calculateDurationHours('22:00', '02:00')).toBe(4);
+  });
+});
+
+describe('groupByMonth', () => {
+  const items = [
+    { id: 'a', date: '2026-05-01' },
+    { id: 'b', date: '2026-05-15' },
+    { id: 'c', date: '2026-04-10' },
+  ];
+
+  it('groups items by MMMM YYYY month in uppercase', () => {
+    const result = groupByMonth(items, (i) => i.date);
+    expect(Object.keys(result)).toHaveLength(2);
+  });
+
+  it('puts items in the correct month bucket', () => {
+    const result = groupByMonth(items, (i) => i.date);
+    const keys = Object.keys(result);
+    const mayKey = keys.find((k) => k.includes('2026') && result[k].some((i) => i.id === 'a'));
+    const aprKey = keys.find((k) => k.includes('2026') && result[k].some((i) => i.id === 'c'));
+    expect(mayKey).toBeTruthy();
+    expect(aprKey).toBeTruthy();
+    if (!mayKey || !aprKey) return;
+    expect(result[mayKey]).toHaveLength(2);
+    expect(result[aprKey]).toHaveLength(1);
+  });
+
+  it('returns an empty object for an empty array', () => {
+    expect(groupByMonth([], (i: { date: string }) => i.date)).toEqual({});
   });
 });

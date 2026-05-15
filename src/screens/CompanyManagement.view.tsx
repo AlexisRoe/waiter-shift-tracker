@@ -28,10 +28,10 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '../store/app.store';
 import type { Company } from '../store/types';
-import { useAppStore } from '../store/useAppStore';
 
-export const CompanyManagementScreen = () => {
+export const CompanyManagementView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const companies = useAppStore((state) => state.companies);
@@ -223,6 +223,9 @@ export const CompanyManagementScreen = () => {
           },
           inner: {
             zIndex: 2000,
+            maxWidth: 430,
+            left: '50%',
+            transform: 'translateX(-50%)',
           },
         }}
         overlayProps={{

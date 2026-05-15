@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppStore } from '../store/useAppStore';
-import { calculateDurationHours } from '../utils/date.util';
+import { useAppStore } from '../store/app.store';
+import { calculateDurationHours, groupByMonth } from '../utils/date.util';
 
 export interface UnifiedTransaction {
   id: string;
@@ -24,7 +24,8 @@ export const useBalance = () => {
   const tipTransactions = useAppStore((state) => state.tipTransactions) || [];
   const profile = useAppStore((state) => state.profile);
 
-  const [tab, setTab] = useState('All');
+  const tab = useAppStore((state) => state.balanceTab);
+  const setTab = useAppStore((state) => state.setBalanceTab);
 
   // --- Monthly earnings ---
   const currentMonthShifts = useMemo(
@@ -128,17 +129,10 @@ export const useBalance = () => {
   }, [allTransactions, tab]);
 
   // --- Group by month ---
-  const grouped = useMemo(() => {
-    return filteredTransactions.reduce(
-      (acc, tx) => {
-        const month = dayjs(tx.date).format('MMMM YYYY').toUpperCase();
-        if (!acc[month]) acc[month] = [];
-        acc[month].push(tx);
-        return acc;
-      },
-      {} as Record<string, UnifiedTransaction[]>,
-    );
-  }, [filteredTransactions]);
+  const grouped = useMemo(
+    () => groupByMonth(filteredTransactions, (tx) => tx.date),
+    [filteredTransactions],
+  );
 
   return {
     tab,

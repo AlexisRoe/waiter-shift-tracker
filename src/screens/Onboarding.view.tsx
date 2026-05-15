@@ -17,9 +17,9 @@ import {
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
 } from '../constants';
-import { useAppStore } from '../store/useAppStore';
+import { useAppStore } from '../store/app.store';
 
-export const OnboardingScreen = () => {
+export const OnboardingView = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const setProfile = useAppStore((state) => state.setProfile);

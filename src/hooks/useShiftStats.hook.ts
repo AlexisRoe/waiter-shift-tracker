@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { useAppStore } from '../store/useAppStore';
-import { calculateDurationHours } from '../utils/date.util';
+import { useAppStore } from '../store/app.store';
+import { calculateDurationHours, groupByMonth } from '../utils/date.util';
 
 /**
  * Provides shift list data with grouping and current-month summary stats.
@@ -13,20 +13,10 @@ export const useShiftStats = () => {
     (a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf(),
   );
 
-  const groupedShifts = sortedShifts.reduce(
-    (acc, shift) => {
-      const monthYear = dayjs(shift.date).format('MMMM YYYY');
-      if (!acc[monthYear]) {
-        acc[monthYear] = [];
-      }
-      acc[monthYear].push(shift);
-      return acc;
-    },
-    {} as Record<string, typeof shifts>,
-  );
+  const groupedShifts = groupByMonth(sortedShifts, (s) => s.date);
 
   const sortedMonths = Array.from(
-    new Set(sortedShifts.map((s) => dayjs(s.date).format('MMMM YYYY'))),
+    new Set(sortedShifts.map((s) => dayjs(s.date).format('MMMM YYYY').toUpperCase())),
   );
 
   const currentMonthShifts = shifts.filter((s) => dayjs(s.date).isSame(dayjs(), 'month'));

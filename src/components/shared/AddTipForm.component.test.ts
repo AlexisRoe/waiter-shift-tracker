@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../store/app.store';
 import { renderWithProviders } from '../../test/renderWithProviders';
 import { AddTipForm } from './AddTipForm.component';
 

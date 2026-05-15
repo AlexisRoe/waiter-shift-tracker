@@ -1,88 +1,64 @@
 import dayjs from 'dayjs';
-import { useAppStore } from '../store/useAppStore';
-import { calculateDurationHours } from '../utils/date.util';
+import { useAppStore } from '../store/app.store';
+import {
+  type CumulativeDataPoint,
+  computeStats,
+  type DashboardPeriod,
+  type DashboardStats,
+  filterShiftsByCompany,
+  filterShiftsByPeriod,
+  generateCumulativeData,
+  generateGroupedBarData,
+  generateHeatmapData,
+  getPreviousPeriodRange,
+  type HeatmapCell,
+  type IncomeVsTipsDataPoint,
+} from '../utils/dashboardCalculations.util';
 
-export interface TrendDataPoint {
-  date: string;
-  value: number;
-}
+export type {
+  CumulativeDataPoint,
+  DashboardPeriod,
+  DashboardStats,
+  HeatmapCell,
+  IncomeVsTipsDataPoint,
+};
 
-export interface WeekdayDataPoint {
-  day: string;
-  hours: number;
-}
-
-export interface MonthlyChartDataPoint {
-  month: string;
-  wage: number;
-  tips: number;
-}
-
-/**
- * Provides all dashboard statistics and chart data.
- * Extracted from DashboardScreen.
- */
-export const useDashboardStats = () => {
+export const useDashboardStats = (period: DashboardPeriod) => {
   const profile = useAppStore((state) => state.profile);
-  const shifts = useAppStore((state) => state.shifts);
+  const allShifts = useAppStore((state) => state.shifts);
+  const tipTransactions = useAppStore((state) => state.tipTransactions);
+  const now = dayjs();
 
-  const currentMonthShifts = shifts.filter((s) => dayjs(s.date).isSame(dayjs(), 'month'));
+  const companyId = profile?.defaultCompanyId ?? '';
+  const companyShifts = companyId ? filterShiftsByCompany(allShifts, companyId) : [];
 
-  const totalHours = currentMonthShifts.reduce(
-    (sum, s) => sum + calculateDurationHours(s.startTime, s.endTime),
-    0,
+  const periodShifts = filterShiftsByPeriod(companyShifts, period, now);
+  const stats = computeStats(periodShifts);
+
+  const { start: prevStart, end: prevEnd } = getPreviousPeriodRange(period, now);
+  const prevShifts = companyShifts.filter(
+    (s) => !!s.endTime && s.date >= prevStart && s.date <= prevEnd,
   );
+  const prevStats = computeStats(prevShifts);
 
-  const totalEarnings = currentMonthShifts.reduce((sum, s) => {
-    const hours = calculateDurationHours(s.startTime, s.endTime);
-    return sum + hours * s.hourlyRate + (s.tips || 0);
-  }, 0);
+  const earningsChange: number | null =
+    prevStats.totalEarnings > 0
+      ? Math.round(
+          ((stats.totalEarnings - prevStats.totalEarnings) / prevStats.totalEarnings) * 100,
+        )
+      : null;
 
-  const monthlyWage = currentMonthShifts.reduce((sum, s) => {
-    return sum + calculateDurationHours(s.startTime, s.endTime) * s.hourlyRate;
-  }, 0);
-
-  const monthlyTips = currentMonthShifts.reduce((sum, s) => sum + (s.tips || 0), 0);
-
-  const avgHourly = totalHours > 0 ? totalEarnings / totalHours : 0;
-
-  // Mock data for charts to match screenshots visually
-  const trendData: TrendDataPoint[] = Array.from({ length: 14 }).map((_, i) => ({
-    date: dayjs()
-      .subtract(13 - i, 'day')
-      .format('MMM D'),
-    value: Math.random() * 100 + 50,
-  }));
-
-  const weekdayData: WeekdayDataPoint[] = [
-    { day: 'M', hours: 4 },
-    { day: 'T', hours: 5 },
-    { day: 'W', hours: 2 },
-    { day: 'T', hours: 6 },
-    { day: 'F', hours: 8 },
-    { day: 'S', hours: 10 }, // Sat is best
-    { day: 'S', hours: 7 },
-  ];
-
-  const monthlyChartData: MonthlyChartDataPoint[] = [
-    { month: 'Nov', wage: 270, tips: 100 },
-    { month: 'Dec', wage: 330, tips: 139 },
-    { month: 'Jan', wage: 400, tips: 130 },
-    { month: 'Feb', wage: 320, tips: 78 },
-    { month: 'Mar', wage: 200, tips: 46 },
-    { month: dayjs().format('MMM'), wage: monthlyWage, tips: monthlyTips },
-  ];
+  const cumulativeData = generateCumulativeData(periodShifts, period, now);
+  const groupedBarData = generateGroupedBarData(periodShifts, period, now, tipTransactions);
+  const heatmapData = generateHeatmapData(periodShifts, period, now);
 
   return {
     profile,
-    currentMonthShifts,
-    totalHours,
-    totalEarnings,
-    monthlyWage,
-    monthlyTips,
-    avgHourly,
-    trendData,
-    weekdayData,
-    monthlyChartData,
+    stats,
+    earningsChange,
+    cumulativeData,
+    groupedBarData,
+    heatmapData,
+    hasShifts: periodShifts.length > 0,
   };
 };

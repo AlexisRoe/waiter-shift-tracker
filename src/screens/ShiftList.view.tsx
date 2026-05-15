@@ -1,14 +1,16 @@
-import { Box, Button, Container, Drawer, Group, Text, useMantineTheme } from '@mantine/core';
+import { Box, Button, Container, Text, useMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BottomDrawer } from '../components/shared/BottomDrawer.component';
 import { CurrencyDisplay } from '../components/shared/CurrencyDisplay.component';
 import { ShiftForm } from '../components/shared/ShiftForm.component';
 import { ShiftListItem } from '../components/shared/ShiftListItem.component';
+import { TealPageHeader } from '../components/shared/TealPageHeader.component';
 import { useShiftStats } from '../hooks/useShiftStats.hook';
 
-export const ShiftListScreen = () => {
+export const ShiftListView = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
@@ -29,27 +31,26 @@ export const ShiftListScreen = () => {
 
   return (
     <Box pb={100}>
-      <Container size="sm" p="md">
-        <Box
-          mb="xl"
-          mt="md"
-          style={{
-            backgroundColor: theme.colors.teal[8],
-            borderRadius: theme.radius.xl,
-            padding: '24px 20px',
-            color: 'white',
-            boxShadow: '0 8px 24px rgba(0, 128, 128, 0.15)',
-          }}
-        >
-          {/* Row 1: Earnings | Hours */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
+      <TealPageHeader>
+        {/* 2×2 grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
+          <Box style={{ display: 'flex', justifyContent: 'center', padding: '0 8px 16px' }}>
             <Box>
               <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
                 {t('shifts.thisMonth')}
               </Text>
               <CurrencyDisplay amount={totalEarnings} size="22px" fw={800} c="white" />
             </Box>
-            <Box style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: 16 }}>
+          </Box>
+          <Box
+            style={{
+              borderLeft: '1px solid rgba(255,255,255,0.2)',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '0 8px 16px',
+            }}
+          >
+            <Box>
               <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
                 {t('shifts.hours')}
               </Text>
@@ -57,19 +58,16 @@ export const ShiftListScreen = () => {
                 {Math.round(totalHours)}h
               </Text>
             </Box>
-          </div>
+          </Box>
 
-          {/* Horizontal divider */}
-          <div
+          <Box
             style={{
-              height: '1px',
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              margin: '16px 0',
+              borderTop: '1px solid rgba(255,255,255,0.2)',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '16px 8px 0',
             }}
-          />
-
-          {/* Row 2: Planned | Closed */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
+          >
             <Box>
               <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
                 {t('shifts.planned')}
@@ -78,7 +76,17 @@ export const ShiftListScreen = () => {
                 {plannedShifts}
               </Text>
             </Box>
-            <Box style={{ borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: 16 }}>
+          </Box>
+          <Box
+            style={{
+              borderLeft: '1px solid rgba(255,255,255,0.2)',
+              borderTop: '1px solid rgba(255,255,255,0.2)',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '16px 8px 0',
+            }}
+          >
+            <Box>
               <Text size="xs" fw={700} opacity={0.8} tt="uppercase" lts={0.5} mb={4}>
                 {t('shifts.closed')}
               </Text>
@@ -86,9 +94,11 @@ export const ShiftListScreen = () => {
                 {closedShifts}
               </Text>
             </Box>
-          </div>
-        </Box>
+          </Box>
+        </div>
+      </TealPageHeader>
 
+      <Container size="sm" p="md">
         <Box mt="md">
           {sortedMonths.length > 0 ? (
             sortedMonths.map((month) => (
@@ -138,7 +148,7 @@ export const ShiftListScreen = () => {
         style={{
           position: 'fixed',
           bottom: 100,
-          right: 'calc(50% - 215px + 20px)', // adjust for max-width
+          right: 'calc(50% - 215px + 20px)',
           boxShadow: theme.shadows.md,
           zIndex: 10,
         }}
@@ -146,29 +156,18 @@ export const ShiftListScreen = () => {
         {t('shifts.newShift')}
       </Button>
 
-      <Drawer
+      <BottomDrawer
         opened={opened}
         onClose={close}
-        position="bottom"
-        size="auto"
-        withinPortal={false}
-        padding="xl"
         radius="lg"
         title={
           <Text fw={700} size="lg">
             {selectedShiftId ? t('shifts.editShift') : t('shifts.newShift')}
           </Text>
         }
-        styles={{
-          content: {
-            borderTopLeftRadius: 32,
-            borderTopRightRadius: 32,
-            boxShadow: '0 -10px 30px rgba(0,0,0,0.1)',
-          },
-        }}
       >
         <ShiftForm shiftId={selectedShiftId} onClose={close} />
-      </Drawer>
+      </BottomDrawer>
     </Box>
   );
 };

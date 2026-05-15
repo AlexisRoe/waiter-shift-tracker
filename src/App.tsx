@@ -7,14 +7,13 @@ import {
   DEFAULT_MAX_MONTHLY_EARNINGS,
   DEFAULT_MIN_HOURLY_WAGE,
 } from './constants';
-import { BalanceScreen } from './screens/BalanceScreen';
-import { CompanyManagementScreen } from './screens/CompanyManagementScreen';
-import { DashboardScreen } from './screens/DashboardScreen';
-// Screens
-import { OnboardingScreen } from './screens/OnboardingScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
-import { ShiftListScreen } from './screens/ShiftListScreen';
-import { useAppStore } from './store/useAppStore';
+import { BalanceView } from './screens/Balance.view';
+import { CompanyManagementView } from './screens/CompanyManagement.view';
+import { DashboardView } from './screens/Dashboard.view';
+import { OnboardingView } from './screens/Onboarding.view';
+import { SettingsView } from './screens/Settings.view';
+import { ShiftListView } from './screens/ShiftList.view';
+import { useAppStore } from './store/app.store';
 
 function App() {
   const hasHydrated = useAppStore((state) => state._hasHydrated);
@@ -40,7 +39,7 @@ function App() {
 
   if (!hasHydrated) {
     return (
-      <Center h="100vh" bg="#f8f9fa">
+      <Center h="100vh" bg="#ffffff">
         <Loader />
       </Center>
     );
@@ -52,7 +51,7 @@ function App() {
         styles={{
           main: {
             padding: 0,
-            backgroundColor: '#f8f9fa',
+            backgroundColor: '#ffffff',
           },
         }}
       >
@@ -60,17 +59,17 @@ function App() {
           <Routes>
             {!isOnboarded ? (
               <>
-                <Route path="/onboarding" element={<OnboardingScreen />} />
+                <Route path="/onboarding" element={<OnboardingView />} />
                 <Route path="*" element={<Navigate to="/onboarding" replace />} />
               </>
             ) : (
               <>
                 <Route element={<AppLayout />}>
-                  <Route path="/" element={<DashboardScreen />} />
-                  <Route path="/shifts" element={<ShiftListScreen />} />
-                  <Route path="/balance" element={<BalanceScreen />} />
-                  <Route path="/settings" element={<SettingsScreen />} />
-                  <Route path="/settings/companies" element={<CompanyManagementScreen />} />
+                  <Route path="/" element={<DashboardView />} />
+                  <Route path="/shifts" element={<ShiftListView />} />
+                  <Route path="/balance" element={<BalanceView />} />
+                  <Route path="/settings" element={<SettingsView />} />
+                  <Route path="/settings/companies" element={<CompanyManagementView />} />
                 </Route>
                 <Route path="/onboarding" element={<Navigate to="/" replace />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

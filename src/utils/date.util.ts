@@ -37,3 +37,15 @@ export const calculateDurationHours = (startTime: string, endTime?: string): num
   const diffMinutes = end.diff(start, 'minute');
   return diffMinutes / 60;
 };
+
+export function groupByMonth<T>(items: T[], getDate: (item: T) => string): Record<string, T[]> {
+  return items.reduce(
+    (acc, item) => {
+      const month = dayjs(getDate(item)).format('MMMM YYYY').toUpperCase();
+      if (!acc[month]) acc[month] = [];
+      acc[month].push(item);
+      return acc;
+    },
+    {} as Record<string, T[]>,
+  );
+}

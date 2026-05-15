@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useAppStore } from '../store/app.store';
 import type { Company, Shift, UserProfile } from '../store/types';
-import { useAppStore } from '../store/useAppStore';
 import { useDashboardStats } from './useDashboardStats.hook';
 
 const profile: UserProfile = {
@@ -35,7 +35,6 @@ describe('useDashboardStats', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-05-15T12:00:00Z'));
     resetStore();
-    vi.spyOn(Math, 'random').mockReturnValue(0.5);
   });
 
   afterEach(() => {
@@ -58,30 +57,23 @@ describe('useDashboardStats', () => {
     ];
     useAppStore.setState({ shifts });
 
-    const { result } = renderHook(() => useDashboardStats());
+    const { result } = renderHook(() => useDashboardStats('month'));
 
-    expect(result.current.totalHours).toBe(2);
-    expect(result.current.monthlyWage).toBe(24);
-    expect(result.current.monthlyTips).toBe(6);
-    expect(result.current.totalEarnings).toBe(30);
-    expect(result.current.avgHourly).toBe(15);
+    expect(result.current.stats.totalHours).toBe(2);
+    expect(result.current.stats.totalWage).toBe(24);
+    expect(result.current.stats.totalTips).toBe(6);
+    expect(result.current.stats.totalEarnings).toBe(30);
   });
 
-  it('exposes fourteen trend points when randomness is fixed', () => {
-    const { result } = renderHook(() => useDashboardStats());
+  it('generates cumulative data points for the current month (up to today = day 15)', () => {
+    const { result } = renderHook(() => useDashboardStats('month'));
 
-    expect(result.current.trendData).toHaveLength(14);
-    expect(result.current.trendData[0]?.value).toBe(100);
+    expect(result.current.cumulativeData).toHaveLength(15);
+    expect(result.current.cumulativeData[0].label).toBe('1');
+    expect(result.current.cumulativeData[14].label).toBe('15');
   });
 
-  it('includes seven weekday buckets for the chart', () => {
-    const { result } = renderHook(() => useDashboardStats());
-
-    expect(result.current.weekdayData).toHaveLength(7);
-    expect(result.current.weekdayData.reduce((s, d) => s + d.hours, 0)).toBeGreaterThan(0);
-  });
-
-  it('injects live monthly totals into the last chart bar', () => {
+  it('returns grouped bar data with income and tips buckets for month period', () => {
     useAppStore.setState({
       shifts: [
         {
@@ -97,10 +89,43 @@ describe('useDashboardStats', () => {
       ],
     });
 
-    const { result } = renderHook(() => useDashboardStats());
+    const { result } = renderHook(() => useDashboardStats('month'));
 
-    const last = result.current.monthlyChartData.at(-1);
-    expect(last?.wage).toBe(20);
-    expect(last?.tips).toBe(4);
+    const firstBucket = result.current.groupedBarData[0];
+    expect(firstBucket?.label).toBe('1');
+    expect(firstBucket?.income).toBe(20);
+    expect(firstBucket?.tips).toBe(4);
+  });
+
+  it('only includes shifts from the default company', () => {
+    useAppStore.setState({
+      shifts: [
+        {
+          id: 's1',
+          date: '2026-05-10',
+          startTime: '10:00',
+          endTime: '12:00',
+          companyId: 'c1',
+          venue: 'Bistro',
+          hourlyRate: 12,
+          tips: 5,
+        },
+        {
+          id: 's2',
+          date: '2026-05-11',
+          startTime: '10:00',
+          endTime: '12:00',
+          companyId: 'other-company',
+          venue: 'Other',
+          hourlyRate: 15,
+          tips: 50,
+        },
+      ],
+    });
+
+    const { result } = renderHook(() => useDashboardStats('month'));
+
+    expect(result.current.stats.totalShifts).toBe(1);
+    expect(result.current.stats.totalTips).toBe(5);
   });
 });

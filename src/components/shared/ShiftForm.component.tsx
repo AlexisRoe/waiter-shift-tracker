@@ -6,32 +6,29 @@ import {
   Select,
   Stack,
   Text,
-  TextInput,
-  Title,
   useMantineTheme,
 } from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import {
+  IconBrandGoogle,
   IconBriefcase,
   IconCalendarEvent,
   IconClock,
-  IconMapPin,
-  IconTrash,
-  IconBrandGoogle,
   IconDownload,
+  IconTrash,
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { CurrencyDisplay } from './CurrencyDisplay.component';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '../../store/app.store';
+import type { Shift } from '../../store/types';
 import {
   downloadIcsFile,
   generateGoogleCalendarUrl,
   generateIcsContent,
 } from '../../utils/calendar.util';
 import { calculateDurationHours } from '../../utils/date.util';
-import type { Shift } from '../../store/types';
+import { CurrencyDisplay } from './CurrencyDisplay.component';
 
 interface ShiftFormProps {
   shiftId?: string;
