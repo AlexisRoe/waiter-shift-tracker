@@ -1,9 +1,14 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import packageJson from './package.json';
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    // Inject the version from package.json
+    __APP_VERSION__: JSON.stringify(packageJson.version),
+  },
   plugins: [
     react(),
     VitePWA({
