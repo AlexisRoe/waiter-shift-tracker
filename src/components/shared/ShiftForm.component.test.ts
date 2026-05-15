@@ -63,7 +63,7 @@ describe('ShiftForm', () => {
     await user.click(screen.getByRole('button', { name: 'Schicht speichern' }));
 
     expect(useAppStore.getState().shifts).toHaveLength(1);
-    expect(useAppStore.getState().shifts[0]?.id).toBe('fixed-id');
+    expect(useAppStore.getState().shifts[0]?.id).toBe('00000000-0000-0000-0000-000000000001');
     expect(onClose).toHaveBeenCalled();
   });
 
