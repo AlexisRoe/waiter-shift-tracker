@@ -1,5 +1,8 @@
 # Waiter Shift Tracker
 
+[![Live demo](https://img.shields.io/badge/demo-live-informational.svg)](https://waiter-shift-tracker.a-roehrling.workers.dev)
+[![CI](https://github.com/AlexisRoe/waiter-shift-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexisRoe/waiter-shift-tracker/actions/workflows/ci.yml)
+
 A mobile-first, offline-capable Progressive Web Application (PWA) for waiters to track their shifts, wages, and tips. All data is securely stored on the local device, ensuring complete privacy.
 
 ## Features
